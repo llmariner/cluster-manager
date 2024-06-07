@@ -1,0 +1,10 @@
+httpPort: 8080
+grpcPort: 8081
+internalGrpcPort: 8082
+
+database:
+  host: postgres
+  port: 5432
+  database: cluster_manager
+  username: user
+  passwordEnvName: DB_PASSWORD

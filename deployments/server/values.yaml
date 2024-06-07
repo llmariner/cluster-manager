@@ -1,0 +1,35 @@
+global:
+  database:
+    host:
+    port:
+    username:
+
+  databaseSecret:
+    name:
+    key:
+
+  awsSecret:
+    name:
+    accessKeyIdKey:
+    secretAccessKeyKey:
+
+  ingress:
+    ingressClassName:
+
+  auth:
+    enable:
+    rbacInternalServerAddr:
+
+httpPort: 8080
+grpcPort: 8081
+internalGrpcPort: 8082
+
+database:
+  database: cluster_manager
+
+replicaCount: 1
+image:
+  repository: public.ecr.aws/v8n3t7y5/llm-operator/cluster-manager-server
+  pullPolicy: IfNotPresent
+
+version:
