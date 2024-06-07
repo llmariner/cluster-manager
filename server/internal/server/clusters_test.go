@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	v1 "github.com/llm-operator/cluster-manager/api/v1"
+	"github.com/llm-operator/cluster-manager/server/internal/config"
 	"github.com/llm-operator/cluster-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
@@ -58,4 +59,19 @@ func TestClusters(t *testing.T) {
 	listResp, err = srv.ListClusters(ctx, &v1.ListClustersRequest{})
 	assert.NoError(t, err)
 	assert.Len(t, listResp.Data, 0)
+}
+
+func TestCreateDefaultCluster(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	srv := New(st)
+
+	c := &config.DefaultClusterConfig{
+		Name:            "default-cluster",
+		RegistrationKey: "rkey",
+		TenantID:        "t0",
+	}
+	err := srv.CreateDefaultCluster(c)
+	assert.NoError(t, err)
 }

@@ -27,6 +27,11 @@ internalGrpcPort: 8082
 database:
   database: cluster_manager
 
+defaultCluster:
+  name: Default
+  registrationKey: default-cluster-registration-key-secret
+  tenantId: default-tenant-id
+
 replicaCount: 1
 image:
   repository: public.ecr.aws/v8n3t7y5/llm-operator/cluster-manager-server

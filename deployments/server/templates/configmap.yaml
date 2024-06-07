@@ -18,3 +18,7 @@ data:
     auth:
       enable: {{ .Values.global.auth.enable }}
       rbacInternalServerAddr: {{ .Values.global.auth.rbacInternalServerAddr }}
+    defaultCluster:
+      name: {{ .Values.defaultCluster.name }}
+      registrationKey: {{ .Values.defaultCluster.registrationKey}}
+      tenantId: {{ .Values.defaultCluster.tenantId }}

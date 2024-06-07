@@ -21,12 +21,34 @@ type AuthConfig struct {
 }
 
 // Validate validates the configuration.
-func (c *AuthConfig) Validate() error {
+func (c *AuthConfig) validate() error {
 	if !c.Enable {
 		return nil
 	}
 	if c.RBACInternalServerAddr == "" {
 		return fmt.Errorf("rbacInternalServerAddr must be set")
+	}
+	return nil
+}
+
+// DefaultClusterConfig is the default cluster configuration.
+type DefaultClusterConfig struct {
+	Name            string `yaml:"name"`
+	RegistrationKey string `yaml:"registrationKey"`
+	TenantID        string `yaml:"tenantId"`
+}
+
+func (c *DefaultClusterConfig) validate() error {
+	if c.Name == "" {
+		// Do nothing.
+		return nil
+	}
+
+	if c.RegistrationKey == "" {
+		return fmt.Errorf("registrationKey must be set")
+	}
+	if c.TenantID == "" {
+		return fmt.Errorf("tenantId must be set")
 	}
 	return nil
 }
@@ -42,6 +64,8 @@ type Config struct {
 	Debug DebugConfig `yaml:"debug"`
 
 	AuthConfig AuthConfig `yaml:"auth"`
+
+	DefaultCluster DefaultClusterConfig `yaml:"defaultCluster"`
 }
 
 // Validate validates the configuration.
@@ -66,9 +90,14 @@ func (c *Config) Validate() error {
 		}
 	}
 
-	if err := c.AuthConfig.Validate(); err != nil {
+	if err := c.AuthConfig.validate(); err != nil {
 		return err
 	}
+
+	if err := c.DefaultCluster.validate(); err != nil {
+		return fmt.Errorf("defaultCluster: %s", err)
+	}
+
 	return nil
 }
 
