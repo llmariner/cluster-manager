@@ -102,6 +102,12 @@ func run(ctx context.Context, c *config.Config) error {
 		errCh <- s.Run(c.InternalGRPCPort)
 	}()
 
+	if dc := c.DefaultCluster; dc.Name != "" {
+		if err := s.CreateDefaultCluster(&dc); err != nil {
+			return err
+		}
+	}
+
 	return <-errCh
 }
 

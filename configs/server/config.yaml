@@ -8,3 +8,8 @@ database:
   database: cluster_manager
   username: user
   passwordEnvName: DB_PASSWORD
+
+defaultCluster:
+  name: Default
+  registrationKey: default-cluster-registration-key-secret
+  tenantId: default-tenant-id

@@ -3,8 +3,10 @@ package server
 import (
 	"context"
 	"errors"
+	"log"
 
 	v1 "github.com/llm-operator/cluster-manager/api/v1"
+	"github.com/llm-operator/cluster-manager/server/internal/config"
 	"github.com/llm-operator/cluster-manager/server/internal/store"
 	gerrors "github.com/llm-operator/common/pkg/gormlib/errors"
 	"github.com/llm-operator/common/pkg/id"
@@ -127,6 +129,35 @@ func (s *S) DeleteCluster(
 		Object:  "cluster",
 		Deleted: true,
 	}, nil
+}
+
+// CreateDefaultCluster creates a default cluster if it does not exist.
+func (s *S) CreateDefaultCluster(c *config.DefaultClusterConfig) error {
+	_, err := s.store.GetClusterByNameAndTenantID(c.Name, c.TenantID)
+	if err == nil {
+		// Do nothing.
+		return nil
+	}
+
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
+
+	log.Printf("Creating default cluster: %q", c.Name)
+	clusterID, err := id.GenerateID("cluster-", 24)
+	if err != nil {
+		return err
+	}
+	if _, err := s.store.CreateCluster(store.ClusterSpec{
+		ClusterID:       clusterID,
+		TenantID:        c.TenantID,
+		Name:            c.Name,
+		RegistrationKey: c.RegistrationKey,
+	}); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ListClusters lists all clusters with registration keys.

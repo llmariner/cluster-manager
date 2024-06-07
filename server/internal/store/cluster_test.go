@@ -32,6 +32,15 @@ func TestCluster(t *testing.T) {
 	assert.Equal(t, clusterID, gotC.ClusterID)
 	assert.Equal(t, tenantID, gotC.TenantID)
 
+	gotC, err = st.GetClusterByNameAndTenantID("name", tenantID)
+	assert.NoError(t, err)
+	assert.Equal(t, clusterID, gotC.ClusterID)
+	assert.Equal(t, tenantID, gotC.TenantID)
+
+	_, err = st.GetClusterByNameAndTenantID("different_name", tenantID)
+	assert.Error(t, err)
+	assert.True(t, errors.Is(err, gorm.ErrRecordNotFound))
+
 	gotCs, err := st.ListClustersByTenantID(tenantID)
 	assert.NoError(t, err)
 	assert.Len(t, gotCs, 1)

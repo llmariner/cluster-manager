@@ -48,6 +48,15 @@ func (s *S) GetCluster(clusterID, tenantID string) (*Cluster, error) {
 	return &c, nil
 }
 
+// GetClusterByNameAndTenantID returns a cluster by name and tenant ID.
+func (s *S) GetClusterByNameAndTenantID(name, tenantID string) (*Cluster, error) {
+	var c Cluster
+	if err := s.db.Where("name = ? AND tenant_id = ?", name, tenantID).Take(&c).Error; err != nil {
+		return nil, err
+	}
+	return &c, nil
+}
+
 // ListClustersByTenantID lists clusters.
 func (s *S) ListClustersByTenantID(tenantID string) ([]*Cluster, error) {
 	var cs []*Cluster
