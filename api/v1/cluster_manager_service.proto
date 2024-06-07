@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package llmoperator.clusters.server.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/llm-operator/cluster-manager/api/v1";
+
+
+message Cluster {
+  string id = 1;
+  string name = 2;
+
+  // registration_key is the key used to register the cluster. Only populated
+  // when a new cluster is created or from internal gRPC service.
+  string registration_key = 3;
+
+  string object = 4;
+}
+
+message CreateClusterRequest {
+  string name = 1;
+}
+
+message ListClustersRequest {
+}
+
+message ListClustersResponse {
+  string object = 1;
+  repeated Cluster data = 2;
+}
+
+message GetClusterRequest {
+  string id = 1;
+}
+
+message DeleteClusterRequest {
+  string id = 1;
+}
+
+message DeleteClusterResponse {
+  string id = 1;
+  string object = 2;
+  bool deleted = 3;
+}
+
+service ClustersService {
+
+  rpc CreateCluster(CreateClusterRequest) returns (Cluster) {
+    option (google.api.http) = {
+      post: "/v1/clusters"
+      body: "*"
+    };
+  }
+
+  rpc ListClusters(ListClustersRequest) returns (ListClustersResponse) {
+    option (google.api.http) = {
+      get: "/v1/clusters"
+    };
+  }
+
+  rpc GetCluster(GetClusterRequest) returns (Cluster) {
+    option (google.api.http) = {
+      get: "/v1/clusters/{id}"
+    };
+  }
+
+  rpc DeleteCluster(DeleteClusterRequest) returns (DeleteClusterResponse) {
+    option (google.api.http) = {
+      delete: "/v1/clusters/{id}"
+    };
+  }
+}
+
+service ClustersInternalService {
+  rpc ListClusters(ListClustersRequest) returns (ListClustersResponse) {
+  }
+
+}
