@@ -212,7 +212,7 @@ var ClustersService_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClustersInternalServiceClient interface {
-	ListClusters(ctx context.Context, in *ListClustersRequest, opts ...grpc.CallOption) (*ListClustersResponse, error)
+	ListInternalClusters(ctx context.Context, in *ListInternalClustersRequest, opts ...grpc.CallOption) (*ListInternalClustersResponse, error)
 }
 
 type clustersInternalServiceClient struct {
@@ -223,9 +223,9 @@ func NewClustersInternalServiceClient(cc grpc.ClientConnInterface) ClustersInter
 	return &clustersInternalServiceClient{cc}
 }
 
-func (c *clustersInternalServiceClient) ListClusters(ctx context.Context, in *ListClustersRequest, opts ...grpc.CallOption) (*ListClustersResponse, error) {
-	out := new(ListClustersResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersInternalService/ListClusters", in, out, opts...)
+func (c *clustersInternalServiceClient) ListInternalClusters(ctx context.Context, in *ListInternalClustersRequest, opts ...grpc.CallOption) (*ListInternalClustersResponse, error) {
+	out := new(ListInternalClustersResponse)
+	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersInternalService/ListInternalClusters", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -236,7 +236,7 @@ func (c *clustersInternalServiceClient) ListClusters(ctx context.Context, in *Li
 // All implementations must embed UnimplementedClustersInternalServiceServer
 // for forward compatibility
 type ClustersInternalServiceServer interface {
-	ListClusters(context.Context, *ListClustersRequest) (*ListClustersResponse, error)
+	ListInternalClusters(context.Context, *ListInternalClustersRequest) (*ListInternalClustersResponse, error)
 	mustEmbedUnimplementedClustersInternalServiceServer()
 }
 
@@ -244,8 +244,8 @@ type ClustersInternalServiceServer interface {
 type UnimplementedClustersInternalServiceServer struct {
 }
 
-func (UnimplementedClustersInternalServiceServer) ListClusters(context.Context, *ListClustersRequest) (*ListClustersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListClusters not implemented")
+func (UnimplementedClustersInternalServiceServer) ListInternalClusters(context.Context, *ListInternalClustersRequest) (*ListInternalClustersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInternalClusters not implemented")
 }
 func (UnimplementedClustersInternalServiceServer) mustEmbedUnimplementedClustersInternalServiceServer() {
 }
@@ -261,20 +261,20 @@ func RegisterClustersInternalServiceServer(s grpc.ServiceRegistrar, srv Clusters
 	s.RegisterService(&ClustersInternalService_ServiceDesc, srv)
 }
 
-func _ClustersInternalService_ListClusters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListClustersRequest)
+func _ClustersInternalService_ListInternalClusters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInternalClustersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClustersInternalServiceServer).ListClusters(ctx, in)
+		return srv.(ClustersInternalServiceServer).ListInternalClusters(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersInternalService/ListClusters",
+		FullMethod: "/llmoperator.clusters.server.v1.ClustersInternalService/ListInternalClusters",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersInternalServiceServer).ListClusters(ctx, req.(*ListClustersRequest))
+		return srv.(ClustersInternalServiceServer).ListInternalClusters(ctx, req.(*ListInternalClustersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -287,8 +287,8 @@ var ClustersInternalService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ClustersInternalServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListClusters",
-			Handler:    _ClustersInternalService_ListClusters_Handler,
+			MethodName: "ListInternalClusters",
+			Handler:    _ClustersInternalService_ListInternalClusters_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

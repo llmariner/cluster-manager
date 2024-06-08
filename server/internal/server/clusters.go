@@ -160,24 +160,30 @@ func (s *S) CreateDefaultCluster(c *config.DefaultClusterConfig) error {
 	return nil
 }
 
-// ListClusters lists all clusters with registration keys.
-func (s *IS) ListClusters(
+// ListInternalClusters lists all clusters with registration keys.
+func (s *IS) ListInternalClusters(
 	ctx context.Context,
-	req *v1.ListClustersRequest,
-) (*v1.ListClustersResponse, error) {
+	req *v1.ListInternalClustersRequest,
+) (*v1.ListInternalClustersResponse, error) {
 	cs, err := s.store.ListClusters()
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "list clusters: %s", err)
 	}
 
-	var clusterProtos []*v1.Cluster
+	var clusterProtos []*v1.InternalCluster
 	for _, c := range cs {
-		clusterProtos = append(clusterProtos, toClusterProto(c, true))
+		clusterProtos = append(clusterProtos, toInternalClusterProto(c))
 	}
-	return &v1.ListClustersResponse{
-		Object: "list",
-		Data:   clusterProtos,
+	return &v1.ListInternalClustersResponse{
+		Clusters: clusterProtos,
 	}, nil
+}
+
+func toInternalClusterProto(c *store.Cluster) *v1.InternalCluster {
+	return &v1.InternalCluster{
+		Cluster:  toClusterProto(c, true),
+		TenantId: c.TenantID,
+	}
 }
 
 func toClusterProto(c *store.Cluster, withRegistrationKey bool) *v1.Cluster {

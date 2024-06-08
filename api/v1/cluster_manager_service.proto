@@ -44,6 +44,18 @@ message DeleteClusterResponse {
   bool deleted = 3;
 }
 
+message InternalCluster {
+  Cluster cluster = 1;
+  string tenant_id = 2;
+}
+
+message ListInternalClustersRequest {
+}
+
+message ListInternalClustersResponse {
+  repeated InternalCluster clusters = 1;
+}
+
 service ClustersService {
 
   rpc CreateCluster(CreateClusterRequest) returns (Cluster) {
@@ -73,7 +85,7 @@ service ClustersService {
 }
 
 service ClustersInternalService {
-  rpc ListClusters(ListClustersRequest) returns (ListClustersResponse) {
+  rpc ListInternalClusters(ListInternalClustersRequest) returns (ListInternalClustersResponse) {
   }
 
 }

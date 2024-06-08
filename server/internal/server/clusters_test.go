@@ -39,11 +39,13 @@ func TestClusters(t *testing.T) {
 	assert.Equal(t, c.Id, listResp.Data[0].Id)
 	assert.Empty(t, listResp.Data[0].RegistrationKey)
 
-	listResp, err = isrv.ListClusters(ctx, &v1.ListClustersRequest{})
+	ilistResp, err := isrv.ListInternalClusters(ctx, &v1.ListInternalClustersRequest{})
 	assert.NoError(t, err)
-	assert.Len(t, listResp.Data, 1)
-	assert.Equal(t, c.Id, listResp.Data[0].Id)
-	assert.NotEmpty(t, listResp.Data[0].RegistrationKey)
+	assert.Len(t, ilistResp.Clusters, 1)
+	ic := ilistResp.Clusters[0]
+	assert.Equal(t, c.Id, ic.Cluster.Id)
+	assert.NotEmpty(t, ic.Cluster.RegistrationKey)
+	assert.Equal(t, defaultTenantID, ic.TenantId)
 
 	_, err = srv.DeleteCluster(ctx, &v1.DeleteClusterRequest{
 		Id: c.Id,
