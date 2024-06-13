@@ -85,7 +85,7 @@ jobs:
         registry-type: public
     - name: Set up Helm
       uses: Azure/setup-helm@v4
-    - name: build and push dispatcher helm chart
+    - name: build and push server helm chart
       run: |
-        helm package --version ${{ needs.update-tag.outputs.new_version }} --destination ./charts ./deployments/server
+        helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/server
         helm push cluster-manager-server-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/v8n3t7y5/llm-operator-charts
