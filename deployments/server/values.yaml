@@ -8,11 +8,6 @@ global:
     name:
     key:
 
-  awsSecret:
-    name:
-    accessKeyIdKey:
-    secretAccessKeyKey:
-
   ingress:
     ingressClassName:
     annotations:
