@@ -51,7 +51,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /llmoperator.files.server.v1.ClustersWorkerService
+      - path: /llmoperator.clusters.server.v1.ClustersWorkerService
         pathType: Prefix
         backend:
           service:
