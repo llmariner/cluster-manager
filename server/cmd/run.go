@@ -98,6 +98,11 @@ func run(ctx context.Context, c *config.Config) error {
 	}()
 
 	go func() {
+		s := server.NewWorkerServiceServer(st)
+		errCh <- s.Run(ctx, c.WorkerServiceGRPCPort, c.AuthConfig)
+	}()
+
+	go func() {
 		s := server.NewInternal(st)
 		errCh <- s.Run(c.InternalGRPCPort)
 	}()

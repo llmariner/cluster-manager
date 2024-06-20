@@ -8,6 +8,7 @@ data:
   config.yaml: |
     httpPort: {{ .Values.httpPort }}
     grpcPort: {{ .Values.grpcPort }}
+    workerServiceGrpcPort: {{ .Values.workerServiceGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
     database:
       host: {{ .Values.global.database.host }}
