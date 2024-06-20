@@ -19,7 +19,7 @@ global:
     enable:
     rbacInternalServerAddr:
 
-workerServiceGrpcService:
+  workerServiceGrpcService:
     annotations:
 
   workerServiceIngress:
