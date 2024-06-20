@@ -19,9 +19,21 @@ global:
     enable:
     rbacInternalServerAddr:
 
+workerServiceGrpcService:
+    annotations:
+
+  workerServiceIngress:
+    create: false
+    ingressClassName:
+    annotations:
+    tls:
+      hosts:
+      secretName:
+
 httpPort: 8080
 grpcPort: 8081
-internalGrpcPort: 8082
+workerServiceGrpcPort: 8082
+internalGrpcPort: 8083
 
 database:
   database: cluster_manager

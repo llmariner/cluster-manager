@@ -89,3 +89,11 @@ service ClustersInternalService {
   }
 
 }
+
+message GetSelfClusterRequest {
+}
+
+service ClustersWorkerService {
+  // GetSelfCluster returns the cluster to which the worker cluster itself belongs.
+  rpc GetSelfCluster(GetSelfClusterRequest) returns (Cluster);
+}

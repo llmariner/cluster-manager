@@ -160,6 +160,23 @@ func (s *S) CreateDefaultCluster(c *config.DefaultClusterConfig) error {
 	return nil
 }
 
+// GetSelfCluster gets a cluster where the worker cluster itself belongs.
+func (s *WS) GetSelfCluster(
+	ctx context.Context,
+	req *v1.GetSelfClusterRequest,
+) (*v1.Cluster, error) {
+	clusterInfo, err := s.extractClusterInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := s.store.GetCluster(clusterInfo.ClusterID, clusterInfo.TenantID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "get cluster: %s", err)
+	}
+	return toClusterProto(c, false), nil
+}
+
 // ListInternalClusters lists all clusters with registration keys.
 func (s *IS) ListInternalClusters(
 	ctx context.Context,

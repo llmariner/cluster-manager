@@ -37,6 +37,26 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "cluster-manager-server.fullname" . }}-worker-service-grpc
+  labels:
+    {{- include "cluster-manager-server.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.global.workerServiceGrpcService.annotations | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: ws-grpc
+    port: {{ .Values.workerServiceGrpcPort }}
+    protocol: TCP
+    targetPort: ws-grpc
+  selector:
+    {{- include "cluster-manager-server.selectorLabels" . | nindent 4 }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
   name: {{ include "cluster-manager-server.fullname" . }}-internal-grpc
   labels:
     {{- include "cluster-manager-server.labels" . | nindent 4 }}
