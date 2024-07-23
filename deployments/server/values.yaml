@@ -48,4 +48,9 @@ image:
   repository: public.ecr.aws/cloudnatix/llm-operator/cluster-manager-server
   pullPolicy: IfNotPresent
 
+podAnnotations:
+nodeSelector:
+affinity:
+tolerations:
+
 version:
