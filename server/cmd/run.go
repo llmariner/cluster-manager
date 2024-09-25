@@ -13,7 +13,7 @@ import (
 	"github.com/llm-operator/cluster-manager/server/internal/server"
 	"github.com/llm-operator/cluster-manager/server/internal/store"
 	"github.com/llm-operator/common/pkg/db"
-	"github.com/llm-operator/rbac-manager/pkg/auth"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
