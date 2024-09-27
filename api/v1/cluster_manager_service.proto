@@ -4,7 +4,7 @@ package llmariner.clusters.server.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/llm-operator/cluster-manager/api/v1";
+option go_package = "github.com/llmariner/cluster-manager/api/v1";
 
 
 message Cluster {

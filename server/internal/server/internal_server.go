@@ -5,9 +5,9 @@ import (
 	"log"
 	"net"
 
-	v1 "github.com/llm-operator/cluster-manager/api/v1"
-	v1legacy "github.com/llm-operator/cluster-manager/api/v1/legacy"
-	"github.com/llm-operator/cluster-manager/server/internal/store"
+	v1 "github.com/llmariner/cluster-manager/api/v1"
+	v1legacy "github.com/llmariner/cluster-manager/api/v1/legacy"
+	"github.com/llmariner/cluster-manager/server/internal/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

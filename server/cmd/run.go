@@ -8,11 +8,11 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
-	v1 "github.com/llm-operator/cluster-manager/api/v1"
-	"github.com/llm-operator/cluster-manager/server/internal/config"
-	"github.com/llm-operator/cluster-manager/server/internal/server"
-	"github.com/llm-operator/cluster-manager/server/internal/store"
-	"github.com/llm-operator/common/pkg/db"
+	v1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/server"
+	"github.com/llmariner/cluster-manager/server/internal/store"
+	"github.com/llmariner/common/pkg/db"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"

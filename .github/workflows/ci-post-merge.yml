@@ -63,8 +63,8 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          public.ecr.aws/cloudnatix/llm-operator/cluster-manager-server:${{ needs.update-tag.outputs.new_version }}
-          public.ecr.aws/cloudnatix/llm-operator/cluster-manager-server:latest
+          public.ecr.aws/cloudnatix/llmariner/cluster-manager-server:${{ needs.update-tag.outputs.new_version }}
+          public.ecr.aws/cloudnatix/llmariner/cluster-manager-server:latest
 
   publish-helm-chart:
     runs-on: ubuntu-latest
@@ -88,4 +88,4 @@ jobs:
     - name: build and push server helm chart
       run: |
         helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/server
-        helm push cluster-manager-server-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/cloudnatix/llm-operator-charts
+        helm push cluster-manager-server-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/cloudnatix/llmariner-charts
