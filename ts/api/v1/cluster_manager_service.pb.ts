@@ -69,11 +69,11 @@ export class ClustersService {
 }
 export class ClustersInternalService {
   static ListInternalClusters(req: ListInternalClustersRequest, initReq?: fm.InitReq): Promise<ListInternalClustersResponse> {
-    return fm.fetchReq<ListInternalClustersRequest, ListInternalClustersResponse>(`/llmoperator.clusters.server.v1.ClustersInternalService/ListInternalClusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
+    return fm.fetchReq<ListInternalClustersRequest, ListInternalClustersResponse>(`/llmariner.clusters.server.v1.ClustersInternalService/ListInternalClusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }
 export class ClustersWorkerService {
   static GetSelfCluster(req: GetSelfClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
-    return fm.fetchReq<GetSelfClusterRequest, Cluster>(`/llmoperator.clusters.server.v1.ClustersWorkerService/GetSelfCluster`, {...initReq, method: "POST", body: JSON.stringify(req)})
+    return fm.fetchReq<GetSelfClusterRequest, Cluster>(`/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }

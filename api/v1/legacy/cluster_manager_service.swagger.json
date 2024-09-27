@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/v1/legacy/cluster_manager_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ClustersInternalService"
+    },
+    {
+      "name": "ClustersWorkerService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Cluster": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "registrationKey": {
+          "type": "string",
+          "description": "registration_key is the key used to register the cluster. Only populated\nwhen a new cluster is created or from internal gRPC service."
+        },
+        "object": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InternalCluster": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "$ref": "#/definitions/v1Cluster"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ListInternalClustersResponse": {
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1InternalCluster"
+          }
+        }
+      }
+    }
+  }
+}
