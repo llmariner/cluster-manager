@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	v1 "github.com/llm-operator/cluster-manager/api/v1"
-	"github.com/llm-operator/cluster-manager/server/internal/config"
-	"github.com/llm-operator/cluster-manager/server/internal/store"
+	v1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

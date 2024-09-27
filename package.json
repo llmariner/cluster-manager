@@ -1,5 +1,5 @@
 {
-  "name": "@llm-operator-types/cluster-manager",
+  "name": "@llmariner-types/cluster-manager",
   "version": "1.0.0",
   "description": "cluster-manager",
   "main": "dist/index.js",
@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/llm-operator/cluster-manager.git"
+    "url": "git+https://github.com/llmariner/cluster-manager.git"
   },
-  "author": "llm-operator",
+  "author": "llmariner",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/llm-operator/cluster-manager/issues"
+    "url": "https://github.com/llmariner/cluster-manager/issues"
   },
-  "homepage": "https://github.com/llm-operator/cluster-manager#readme"
+  "homepage": "https://github.com/llmariner/cluster-manager#readme"
 }
