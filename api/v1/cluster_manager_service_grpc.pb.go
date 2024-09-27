@@ -34,7 +34,7 @@ func NewClustersServiceClient(cc grpc.ClientConnInterface) ClustersServiceClient
 
 func (c *clustersServiceClient) CreateCluster(ctx context.Context, in *CreateClusterRequest, opts ...grpc.CallOption) (*Cluster, error) {
 	out := new(Cluster)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersService/CreateCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/CreateCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (c *clustersServiceClient) CreateCluster(ctx context.Context, in *CreateClu
 
 func (c *clustersServiceClient) ListClusters(ctx context.Context, in *ListClustersRequest, opts ...grpc.CallOption) (*ListClustersResponse, error) {
 	out := new(ListClustersResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersService/ListClusters", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/ListClusters", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (c *clustersServiceClient) ListClusters(ctx context.Context, in *ListCluste
 
 func (c *clustersServiceClient) GetCluster(ctx context.Context, in *GetClusterRequest, opts ...grpc.CallOption) (*Cluster, error) {
 	out := new(Cluster)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersService/GetCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/GetCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (c *clustersServiceClient) GetCluster(ctx context.Context, in *GetClusterRe
 
 func (c *clustersServiceClient) DeleteCluster(ctx context.Context, in *DeleteClusterRequest, opts ...grpc.CallOption) (*DeleteClusterResponse, error) {
 	out := new(DeleteClusterResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersService/DeleteCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/DeleteCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func _ClustersService_CreateCluster_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersService/CreateCluster",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/CreateCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersServiceServer).CreateCluster(ctx, req.(*CreateClusterRequest))
@@ -136,7 +136,7 @@ func _ClustersService_ListClusters_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersService/ListClusters",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/ListClusters",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersServiceServer).ListClusters(ctx, req.(*ListClustersRequest))
@@ -154,7 +154,7 @@ func _ClustersService_GetCluster_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersService/GetCluster",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/GetCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersServiceServer).GetCluster(ctx, req.(*GetClusterRequest))
@@ -172,7 +172,7 @@ func _ClustersService_DeleteCluster_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersService/DeleteCluster",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/DeleteCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersServiceServer).DeleteCluster(ctx, req.(*DeleteClusterRequest))
@@ -184,7 +184,7 @@ func _ClustersService_DeleteCluster_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ClustersService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.clusters.server.v1.ClustersService",
+	ServiceName: "llmariner.clusters.server.v1.ClustersService",
 	HandlerType: (*ClustersServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -225,7 +225,7 @@ func NewClustersInternalServiceClient(cc grpc.ClientConnInterface) ClustersInter
 
 func (c *clustersInternalServiceClient) ListInternalClusters(ctx context.Context, in *ListInternalClustersRequest, opts ...grpc.CallOption) (*ListInternalClustersResponse, error) {
 	out := new(ListInternalClustersResponse)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersInternalService/ListInternalClusters", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersInternalService/ListInternalClusters", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -271,7 +271,7 @@ func _ClustersInternalService_ListInternalClusters_Handler(srv interface{}, ctx 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersInternalService/ListInternalClusters",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersInternalService/ListInternalClusters",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersInternalServiceServer).ListInternalClusters(ctx, req.(*ListInternalClustersRequest))
@@ -283,7 +283,7 @@ func _ClustersInternalService_ListInternalClusters_Handler(srv interface{}, ctx 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ClustersInternalService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.clusters.server.v1.ClustersInternalService",
+	ServiceName: "llmariner.clusters.server.v1.ClustersInternalService",
 	HandlerType: (*ClustersInternalServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -313,7 +313,7 @@ func NewClustersWorkerServiceClient(cc grpc.ClientConnInterface) ClustersWorkerS
 
 func (c *clustersWorkerServiceClient) GetSelfCluster(ctx context.Context, in *GetSelfClusterRequest, opts ...grpc.CallOption) (*Cluster, error) {
 	out := new(Cluster)
-	err := c.cc.Invoke(ctx, "/llmoperator.clusters.server.v1.ClustersWorkerService/GetSelfCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -359,7 +359,7 @@ func _ClustersWorkerService_GetSelfCluster_Handler(srv interface{}, ctx context.
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/llmoperator.clusters.server.v1.ClustersWorkerService/GetSelfCluster",
+		FullMethod: "/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClustersWorkerServiceServer).GetSelfCluster(ctx, req.(*GetSelfClusterRequest))
@@ -371,7 +371,7 @@ func _ClustersWorkerService_GetSelfCluster_Handler(srv interface{}, ctx context.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ClustersWorkerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmoperator.clusters.server.v1.ClustersWorkerService",
+	ServiceName: "llmariner.clusters.server.v1.ClustersWorkerService",
 	HandlerType: (*ClustersWorkerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

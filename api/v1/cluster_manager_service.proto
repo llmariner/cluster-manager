@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package llmoperator.clusters.server.v1;
+package llmariner.clusters.server.v1;
 
 import "google/api/annotations.proto";
 

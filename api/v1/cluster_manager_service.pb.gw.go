@@ -199,7 +199,7 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/CreateCluster", runtime.WithHTTPPathPattern("/v1/clusters"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/CreateCluster", runtime.WithHTTPPathPattern("/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -222,7 +222,7 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/ListClusters", runtime.WithHTTPPathPattern("/v1/clusters"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/ListClusters", runtime.WithHTTPPathPattern("/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -245,7 +245,7 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/GetCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/GetCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -268,7 +268,7 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/DeleteCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/DeleteCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -330,7 +330,7 @@ func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/CreateCluster", runtime.WithHTTPPathPattern("/v1/clusters"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/CreateCluster", runtime.WithHTTPPathPattern("/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -350,7 +350,7 @@ func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/ListClusters", runtime.WithHTTPPathPattern("/v1/clusters"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/ListClusters", runtime.WithHTTPPathPattern("/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -370,7 +370,7 @@ func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/GetCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/GetCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -390,7 +390,7 @@ func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmoperator.clusters.server.v1.ClustersService/DeleteCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/llmariner.clusters.server.v1.ClustersService/DeleteCluster", runtime.WithHTTPPathPattern("/v1/clusters/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

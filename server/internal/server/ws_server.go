@@ -7,6 +7,7 @@ import (
 	"net"
 
 	v1 "github.com/llm-operator/cluster-manager/api/v1"
+	v1legacy "github.com/llm-operator/cluster-manager/api/v1/legacy"
 	"github.com/llm-operator/cluster-manager/server/internal/config"
 	"github.com/llm-operator/cluster-manager/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
@@ -27,9 +28,15 @@ func NewWorkerServiceServer(s *store.S) *WS {
 	}
 }
 
+// legacyWorkerServer is a type alias required for embedding the same types in IS
+// nolint:unused
+type legacyWorkerServer = v1legacy.UnimplementedClustersWorkerServiceServer
+
 // WS is a server for worker services.
 type WS struct {
 	v1.UnimplementedClustersWorkerServiceServer
+	// nolint:unused
+	legacyWorkerServer
 
 	srv   *grpc.Server
 	store *store.S
@@ -55,6 +62,7 @@ func (ws *WS) Run(ctx context.Context, port int, authConfig config.AuthConfig) e
 
 	srv := grpc.NewServer(opts...)
 	v1.RegisterClustersWorkerServiceServer(srv, ws)
+	v1legacy.RegisterClustersWorkerServiceServer(srv, ws)
 	reflection.Register(srv)
 
 	ws.srv = srv

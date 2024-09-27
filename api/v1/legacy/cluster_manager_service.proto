@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package llmoperator.clusters.server.v1;
+
+import "google/api/annotations.proto";
+import "api/v1/cluster_manager_service.proto";
+
+option go_package = "github.com/llm-operator/cluster-manager/api/v1/legacy";
+
+service ClustersInternalService {
+  rpc ListInternalClusters(llmariner.clusters.server.v1.ListInternalClustersRequest) returns (llmariner.clusters.server.v1.ListInternalClustersResponse) {
+  }
+}
+
+service ClustersWorkerService {
+  // GetSelfCluster returns the cluster to which the worker cluster itself belongs.
+  rpc GetSelfCluster(llmariner.clusters.server.v1.GetSelfClusterRequest) returns (llmariner.clusters.server.v1.Cluster);
+}
