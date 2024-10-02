@@ -58,4 +58,11 @@ spec:
             name: {{ include "cluster-manager-server.fullname" . }}-worker-service-grpc
             port:
               number: {{ .Values.workerServiceGrpcPort }}
+      - path: /llmariner.clusters.server.v1.ClustersWorkerService
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "cluster-manager-server.fullname" . }}-worker-service-grpc
+            port:
+              number: {{ .Values.workerServiceGrpcPort }}
 {{- end -}}
