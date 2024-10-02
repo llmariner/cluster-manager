@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"errors"
-	"log"
 
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
@@ -143,7 +142,7 @@ func (s *S) CreateDefaultCluster(c *config.DefaultClusterConfig) error {
 		return err
 	}
 
-	log.Printf("Creating default cluster: %q", c.Name)
+	s.log.Info("Creating default cluster", "name", c.Name)
 	clusterID, err := id.GenerateID("cluster-", 24)
 	if err != nil {
 		return err

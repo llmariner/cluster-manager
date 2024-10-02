@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
 	"github.com/llmariner/cluster-manager/server/internal/store"
@@ -16,8 +17,8 @@ func TestClusters(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st)
-	isrv := NewInternal(st)
+	srv := New(st, testr.New(t))
+	isrv := NewInternal(st, testr.New(t))
 	ctx := context.Background()
 
 	c, err := srv.CreateCluster(ctx, &v1.CreateClusterRequest{
@@ -67,7 +68,7 @@ func TestGetSelfCluster(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	wsrv := NewWorkerServiceServer(st)
+	wsrv := NewWorkerServiceServer(st, testr.New(t))
 	ctx := context.Background()
 
 	_, err := st.CreateCluster(store.ClusterSpec{
@@ -86,7 +87,7 @@ func TestCreateDefaultCluster(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st)
+	srv := New(st, testr.New(t))
 
 	c := &config.DefaultClusterConfig{
 		Name:            "default-cluster",

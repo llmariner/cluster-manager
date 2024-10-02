@@ -2,9 +2,9 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net"
 
+	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	"google.golang.org/grpc"
@@ -12,9 +12,10 @@ import (
 )
 
 // NewInternal creates an internal server.
-func NewInternal(store *store.S) *IS {
+func NewInternal(store *store.S, log logr.Logger) *IS {
 	return &IS{
 		store: store,
+		log:   log.WithName("internal"),
 	}
 }
 
@@ -22,14 +23,14 @@ func NewInternal(store *store.S) *IS {
 type IS struct {
 	v1.UnimplementedClustersInternalServiceServer
 
-	srv *grpc.Server
-
+	srv   *grpc.Server
 	store *store.S
+	log   logr.Logger
 }
 
 // Run starts the gRPC server.
 func (s *IS) Run(port int) error {
-	log.Printf("Starting server on port %d\n", port)
+	s.log.Info("Starting internal server...", "port", port)
 
 	grpcServer := grpc.NewServer()
 	v1.RegisterClustersInternalServiceServer(grpcServer, s)

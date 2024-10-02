@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 
+	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
 	"github.com/llmariner/cluster-manager/server/internal/store"
@@ -24,9 +24,10 @@ const (
 )
 
 // New creates a server.
-func New(store *store.S) *S {
+func New(store *store.S, log logr.Logger) *S {
 	return &S{
 		store: store,
+		log:   log.WithName("grpc"),
 	}
 }
 
@@ -34,16 +35,16 @@ func New(store *store.S) *S {
 type S struct {
 	v1.UnimplementedClustersServiceServer
 
-	srv *grpc.Server
-
+	srv   *grpc.Server
 	store *store.S
+	log   logr.Logger
 
 	enableAuth bool
 }
 
 // Run starts the gRPC server.
 func (s *S) Run(ctx context.Context, port int, authConfig config.AuthConfig) error {
-	log.Printf("Starting server on port %d\n", port)
+	s.log.Info("Starting gRPC server...", "port", port)
 
 	var opts []grpc.ServerOption
 	if authConfig.Enable {
