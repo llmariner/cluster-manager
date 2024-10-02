@@ -28,3 +28,5 @@ data:
       name: {{ .Values.defaultCluster.name }}
       registrationKey: {{ .Values.defaultCluster.registrationKey}}
       tenantId: {{ .Values.defaultCluster.tenantId }}
+    usageSender:
+      {{- toYaml .Values.global.usageSender | nindent 6 }}

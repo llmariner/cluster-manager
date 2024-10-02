@@ -17,10 +17,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-const (
-	defaultClusterID = "default"
-)
-
 // NewWorkerServiceServer creates a new worker service server.
 func NewWorkerServiceServer(s *store.S, log logr.Logger) *WS {
 	return &WS{

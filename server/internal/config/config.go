@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/llmariner/api-usage/pkg/sender"
 	"github.com/llmariner/common/pkg/db"
 	"gopkg.in/yaml.v3"
 )
@@ -66,6 +67,8 @@ type Config struct {
 
 	AuthConfig AuthConfig `yaml:"auth"`
 
+	UsageSender sender.Config `yaml:"usageSender"`
+
 	DefaultCluster DefaultClusterConfig `yaml:"defaultCluster"`
 }
 
@@ -102,6 +105,9 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("defaultCluster: %s", err)
 	}
 
+	if err := c.UsageSender.Validate(); err != nil {
+		return err
+	}
 	return nil
 }
 
