@@ -19,7 +19,7 @@ func TestClusters(t *testing.T) {
 
 	srv := New(st, testr.New(t))
 	isrv := NewInternal(st, testr.New(t))
-	ctx := context.Background()
+	ctx := fakeAuthInto(context.Background())
 
 	c, err := srv.CreateCluster(ctx, &v1.CreateClusterRequest{
 		Name: "cluster",
@@ -69,7 +69,7 @@ func TestGetSelfCluster(t *testing.T) {
 	defer tearDown()
 
 	wsrv := NewWorkerServiceServer(st, testr.New(t))
-	ctx := context.Background()
+	ctx := fakeAuthInto(context.Background())
 
 	_, err := st.CreateCluster(store.ClusterSpec{
 		Name:      "cluster",

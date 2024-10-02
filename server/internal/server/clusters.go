@@ -3,12 +3,14 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	gerrors "github.com/llmariner/common/pkg/gormlib/errors"
 	"github.com/llmariner/common/pkg/id"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -19,9 +21,9 @@ func (s *S) CreateCluster(
 	ctx context.Context,
 	req *v1.CreateClusterRequest,
 ) (*v1.Cluster, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	if req.Name == "" {
@@ -59,9 +61,9 @@ func (s *S) ListClusters(
 	ctx context.Context,
 	req *v1.ListClustersRequest,
 ) (*v1.ListClustersResponse, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	cs, err := s.store.ListClustersByTenantID(userInfo.TenantID)
@@ -84,9 +86,9 @@ func (s *S) GetCluster(
 	ctx context.Context,
 	req *v1.GetClusterRequest,
 ) (*v1.Cluster, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	if req.Id == "" {
@@ -108,9 +110,9 @@ func (s *S) DeleteCluster(
 	ctx context.Context,
 	req *v1.DeleteClusterRequest,
 ) (*v1.DeleteClusterResponse, error) {
-	userInfo, err := s.extractUserInfoFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userInfo, ok := auth.ExtractUserInfoFromContext(ctx)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract user info from context")
 	}
 
 	if req.Id == "" {
