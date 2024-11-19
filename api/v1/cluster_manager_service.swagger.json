@@ -176,6 +176,24 @@
         },
         "object": {
           "type": "string"
+        },
+        "componentsStatuses": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1ComponentStatus"
+          },
+          "description": "components_statuses is keyed by component name."
+        }
+      }
+    },
+    "v1ComponentStatus": {
+      "type": "object",
+      "properties": {
+        "isHealthy": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
       }
     },

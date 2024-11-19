@@ -3,6 +3,7 @@ syntax = "proto3";
 package llmariner.clusters.server.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/llmariner/cluster-manager/api/v1";
 
@@ -16,6 +17,9 @@ message Cluster {
   string registration_key = 3;
 
   string object = 4;
+
+  // components_statuses is keyed by component name.
+  map<string, ComponentStatus> components_statuses = 5;
 }
 
 message CreateClusterRequest {
@@ -93,7 +97,20 @@ service ClustersInternalService {
 message GetSelfClusterRequest {
 }
 
+message ComponentStatus {
+  bool isHealthy = 1;
+  string message = 2;
+}
+
+message UpdateComponentStatusRequest {
+  string name = 1;
+  ComponentStatus status = 2;
+}
+
 service ClustersWorkerService {
   // GetSelfCluster returns the cluster to which the worker cluster itself belongs.
   rpc GetSelfCluster(GetSelfClusterRequest) returns (Cluster);
+
+  // UpdateComponentStatus updates the component's health status to the cluster.
+  rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (google.protobuf.Empty) {}
 }

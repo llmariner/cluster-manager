@@ -5,11 +5,13 @@
 */
 
 import * as fm from "../../fetch.pb"
+import * as GoogleProtobufEmpty from "../../google/protobuf/empty.pb"
 export type Cluster = {
   id?: string
   name?: string
   registrationKey?: string
   object?: string
+  componentsStatuses?: {[key: string]: ComponentStatus}
 }
 
 export type CreateClusterRequest = {
@@ -53,6 +55,16 @@ export type ListInternalClustersResponse = {
 export type GetSelfClusterRequest = {
 }
 
+export type ComponentStatus = {
+  isHealthy?: boolean
+  message?: string
+}
+
+export type UpdateComponentStatusRequest = {
+  name?: string
+  status?: ComponentStatus
+}
+
 export class ClustersService {
   static CreateCluster(req: CreateClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
     return fm.fetchReq<CreateClusterRequest, Cluster>(`/v1/clusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
@@ -75,5 +87,8 @@ export class ClustersInternalService {
 export class ClustersWorkerService {
   static GetSelfCluster(req: GetSelfClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
     return fm.fetchReq<GetSelfClusterRequest, Cluster>(`/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster`, {...initReq, method: "POST", body: JSON.stringify(req)})
+  }
+  static UpdateComponentStatus(req: UpdateComponentStatusRequest, initReq?: fm.InitReq): Promise<GoogleProtobufEmpty.Empty> {
+    return fm.fetchReq<UpdateComponentStatusRequest, GoogleProtobufEmpty.Empty>(`/llmariner.clusters.server.v1.ClustersWorkerService/UpdateComponentStatus`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }
