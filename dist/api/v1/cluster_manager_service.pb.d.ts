@@ -1,9 +1,13 @@
 import * as fm from "../../fetch.pb";
+import * as GoogleProtobufEmpty from "../../google/protobuf/empty.pb";
 export type Cluster = {
     id?: string;
     name?: string;
     registrationKey?: string;
     object?: string;
+    componentsStatuses?: {
+        [key: string]: ComponentStatus;
+    };
 };
 export type CreateClusterRequest = {
     name?: string;
@@ -33,6 +37,14 @@ export type ListInternalClustersResponse = {
     clusters?: InternalCluster[];
 };
 export type GetSelfClusterRequest = {};
+export type ComponentStatus = {
+    isHealthy?: boolean;
+    message?: string;
+};
+export type UpdateComponentStatusRequest = {
+    name?: string;
+    status?: ComponentStatus;
+};
 export declare class ClustersService {
     static CreateCluster(req: CreateClusterRequest, initReq?: fm.InitReq): Promise<Cluster>;
     static ListClusters(req: ListClustersRequest, initReq?: fm.InitReq): Promise<ListClustersResponse>;
@@ -44,4 +56,5 @@ export declare class ClustersInternalService {
 }
 export declare class ClustersWorkerService {
     static GetSelfCluster(req: GetSelfClusterRequest, initReq?: fm.InitReq): Promise<Cluster>;
+    static UpdateComponentStatus(req: UpdateComponentStatusRequest, initReq?: fm.InitReq): Promise<GoogleProtobufEmpty.Empty>;
 }
