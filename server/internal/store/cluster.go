@@ -27,13 +27,33 @@ type ClusterSpec struct {
 
 // CreateCluster creates a cluster.
 func (s *S) CreateCluster(spec ClusterSpec) (*Cluster, error) {
+	var components = []string{
+		"inference-manager-engine",
+		"model-manager-loader",
+		"session-manager-agent",
+		"job-manager-dispatcher",
+	}
+
 	c := &Cluster{
 		ClusterID:       spec.ClusterID,
 		TenantID:        spec.TenantID,
 		Name:            spec.Name,
 		RegistrationKey: spec.RegistrationKey,
 	}
-	if err := s.db.Create(c).Error; err != nil {
+	if err := s.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(c).Error; err != nil {
+			return err
+		}
+		for _, name := range components {
+			if err := CreateClusterComponent(tx, &ClusterComponent{
+				ClusterID: spec.ClusterID,
+				Name:      name,
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
 		return nil, err
 	}
 	return c, nil
@@ -77,12 +97,14 @@ func (s *S) ListClusters() ([]*Cluster, error) {
 
 // DeleteCluster deletes a cluster by cluster ID and tenant ID.
 func (s *S) DeleteCluster(clusterID, tenantID string) error {
-	res := s.db.Unscoped().Where("cluster_id = ? AND tenant_id = ?", clusterID, tenantID).Delete(&Cluster{})
-	if err := res.Error; err != nil {
-		return err
-	}
-	if res.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-	return nil
+	return s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Unscoped().Where("cluster_id = ? AND tenant_id = ?", clusterID, tenantID).Delete(&Cluster{})
+		if err := res.Error; err != nil {
+			return err
+		}
+		if res.RowsAffected == 0 {
+			return gorm.ErrRecordNotFound
+		}
+		return DeleteClusterComponents(tx, clusterID)
+	})
 }

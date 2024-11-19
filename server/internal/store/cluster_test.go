@@ -45,6 +45,10 @@ func TestCluster(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, gotCs, 1)
 
+	cs, err := st.FindClusterComponents(clusterID)
+	assert.NoError(t, err)
+	assert.Len(t, cs, 4)
+
 	_, err = st.CreateCluster(ClusterSpec{
 		ClusterID: "f1",
 		TenantID:  "tid1",
@@ -65,4 +69,8 @@ func TestCluster(t *testing.T) {
 
 	err = st.DeleteCluster(clusterID, tenantID)
 	assert.True(t, errors.Is(err, gorm.ErrRecordNotFound))
+
+	cs, err = st.FindClusterComponents(clusterID)
+	assert.NoError(t, err)
+	assert.Len(t, cs, 0)
 }
