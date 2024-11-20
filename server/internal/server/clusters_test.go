@@ -33,12 +33,14 @@ func TestClusters(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Empty(t, c.RegistrationKey)
+	assert.Len(t, c.ComponentsStatuses, 4)
 
 	listResp, err := srv.ListClusters(ctx, &v1.ListClustersRequest{})
 	assert.NoError(t, err)
 	assert.Len(t, listResp.Data, 1)
 	assert.Equal(t, c.Id, listResp.Data[0].Id)
 	assert.Empty(t, listResp.Data[0].RegistrationKey)
+	assert.Len(t, listResp.Data[0].ComponentsStatuses, 4)
 
 	ilistResp, err := isrv.ListInternalClusters(ctx, &v1.ListInternalClustersRequest{})
 	assert.NoError(t, err)
@@ -95,5 +97,31 @@ func TestCreateDefaultCluster(t *testing.T) {
 		TenantID:        "t0",
 	}
 	err := srv.CreateDefaultCluster(c)
+	assert.NoError(t, err)
+}
+
+func TestUpdateComponentStatus(t *testing.T) {
+	st, tearDown := store.NewTest(t)
+	defer tearDown()
+
+	wsrv := NewWorkerServiceServer(st, testr.New(t))
+	ctx := fakeAuthInto(context.Background())
+
+	err := store.CreateClusterComponent(st.DB(), &store.ClusterComponent{
+		Name:          "component1",
+		ClusterID:     defaultClusterID,
+		IsHealthy:     true,
+		StatusMessage: "status healthy",
+	})
+	assert.NoError(t, err)
+
+	req := &v1.UpdateComponentStatusRequest{
+		Name: "component1",
+		Status: &v1.ComponentStatus{
+			IsHealthy: false,
+			Message:   "status unhealthy",
+		},
+	}
+	_, err = wsrv.UpdateComponentStatus(ctx, req)
 	assert.NoError(t, err)
 }

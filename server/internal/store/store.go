@@ -24,5 +24,11 @@ func (s *S) AutoMigrate() error {
 func autoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&Cluster{},
+		&ClusterComponent{},
 	)
+}
+
+// DB returns the gorm database instance.
+func (s *S) DB() *gorm.DB {
+	return s.db
 }

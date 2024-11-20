@@ -13,6 +13,7 @@ import (
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
 )
 
@@ -73,7 +74,13 @@ func (s *S) ListClusters(
 
 	var clusterProtos []*v1.Cluster
 	for _, c := range cs {
-		clusterProtos = append(clusterProtos, toClusterProto(c, false))
+		cProto := toClusterProto(c, false)
+		coms, err := s.store.FindClusterComponents(c.ClusterID)
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
+		}
+		cProto.ComponentsStatuses = toComponentStatusesProto(coms)
+		clusterProtos = append(clusterProtos, cProto)
 	}
 	return &v1.ListClustersResponse{
 		Object: "list",
@@ -102,7 +109,13 @@ func (s *S) GetCluster(
 		}
 		return nil, status.Errorf(codes.Internal, "get cluster: %s", err)
 	}
-	return toClusterProto(c, false), nil
+	cProto := toClusterProto(c, false)
+	coms, err := s.store.FindClusterComponents(c.ClusterID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
+	}
+	cProto.ComponentsStatuses = toComponentStatusesProto(coms)
+	return cProto, nil
 }
 
 // DeleteCluster deletes a cluster.
@@ -178,6 +191,38 @@ func (s *WS) GetSelfCluster(
 	return toClusterProto(c, false), nil
 }
 
+// UpdateComponentStatus updates the status of a component in a cluster.
+func (s *WS) UpdateComponentStatus(
+	ctx context.Context,
+	req *v1.UpdateComponentStatusRequest,
+) (*emptypb.Empty, error) {
+	clusterInfo, err := s.extractClusterInfoFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.Name == "" {
+		return nil, status.Error(codes.InvalidArgument, "name is required")
+	}
+
+	if req.Status == nil {
+		return nil, status.Error(codes.InvalidArgument, "status is required")
+	}
+
+	c := &store.ClusterComponent{
+		ClusterID:     clusterInfo.ClusterID,
+		Name:          req.Name,
+		IsHealthy:     req.Status.IsHealthy,
+		StatusMessage: req.Status.Message,
+	}
+
+	err = s.store.UpdateOrCreateClusterComponent(c)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "update or create cluster component: %s", err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
 // ListInternalClusters lists all clusters with registration keys.
 func (s *IS) ListInternalClusters(
 	ctx context.Context,
@@ -216,4 +261,15 @@ func toClusterProto(c *store.Cluster, withRegistrationKey bool) *v1.Cluster {
 		RegistrationKey: rkey,
 		Object:          "cluster",
 	}
+}
+
+func toComponentStatusesProto(cs []store.ClusterComponent) map[string]*v1.ComponentStatus {
+	m := make(map[string]*v1.ComponentStatus)
+	for _, c := range cs {
+		m[c.Name] = &v1.ComponentStatus{
+			IsHealthy: c.IsHealthy,
+			Message:   c.StatusMessage,
+		}
+	}
+	return m
 }
