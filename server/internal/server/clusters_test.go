@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
@@ -17,7 +18,7 @@ func TestClusters(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, testr.New(t))
+	srv := New(st, testr.New(t), time.Hour)
 	isrv := NewInternal(st, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
@@ -89,7 +90,7 @@ func TestCreateDefaultCluster(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, testr.New(t))
+	srv := New(st, testr.New(t), time.Hour)
 
 	c := &config.DefaultClusterConfig{
 		Name:            "default-cluster",

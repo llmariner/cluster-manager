@@ -25,15 +25,16 @@ type ClusterSpec struct {
 	RegistrationKey string
 }
 
+// ClusterComponentNames is the names of cluster components.
+var ClusterComponentNames = []string{
+	"inference-manager-engine",
+	"model-manager-loader",
+	"session-manager-agent",
+	"job-manager-dispatcher",
+}
+
 // CreateCluster creates a cluster.
 func (s *S) CreateCluster(spec ClusterSpec) (*Cluster, error) {
-	var components = []string{
-		"inference-manager-engine",
-		"model-manager-loader",
-		"session-manager-agent",
-		"job-manager-dispatcher",
-	}
-
 	c := &Cluster{
 		ClusterID:       spec.ClusterID,
 		TenantID:        spec.TenantID,
@@ -44,7 +45,7 @@ func (s *S) CreateCluster(spec ClusterSpec) (*Cluster, error) {
 		if err := tx.Create(c).Error; err != nil {
 			return err
 		}
-		for _, name := range components {
+		for _, name := range ClusterComponentNames {
 			if err := CreateClusterComponent(tx, &ClusterComponent{
 				ClusterID: spec.ClusterID,
 				Name:      name,
