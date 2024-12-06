@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
@@ -72,6 +73,7 @@ func (s *S) ListClusters(
 		return nil, status.Errorf(codes.Internal, "list clusters: %s", err)
 	}
 
+	expiredAt := time.Now().Add(-s.componentStatusTimeout)
 	var clusterProtos []*v1.Cluster
 	for _, c := range cs {
 		cProto := toClusterProto(c, false)
@@ -79,7 +81,7 @@ func (s *S) ListClusters(
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
 		}
-		cProto.ComponentsStatuses = toComponentStatusesProto(coms)
+		cProto.ComponentsStatuses = toComponentStatusesProto(coms, expiredAt)
 		clusterProtos = append(clusterProtos, cProto)
 	}
 	return &v1.ListClustersResponse{
@@ -114,7 +116,8 @@ func (s *S) GetCluster(
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
 	}
-	cProto.ComponentsStatuses = toComponentStatusesProto(coms)
+	expiredAt := time.Now().Add(-s.componentStatusTimeout)
+	cProto.ComponentsStatuses = toComponentStatusesProto(coms, expiredAt)
 	return cProto, nil
 }
 
@@ -263,9 +266,17 @@ func toClusterProto(c *store.Cluster, withRegistrationKey bool) *v1.Cluster {
 	}
 }
 
-func toComponentStatusesProto(cs []store.ClusterComponent) map[string]*v1.ComponentStatus {
+func toComponentStatusesProto(cs []store.ClusterComponent, ts time.Time) map[string]*v1.ComponentStatus {
 	m := make(map[string]*v1.ComponentStatus)
+	for _, ccn := range store.ClusterComponentNames {
+		m[ccn] = &v1.ComponentStatus{
+			IsHealthy: false,
+		}
+	}
 	for _, c := range cs {
+		if c.UpdatedAt.Before(ts) {
+			continue
+		}
 		m[c.Name] = &v1.ComponentStatus{
 			IsHealthy: c.IsHealthy,
 			Message:   c.StatusMessage,

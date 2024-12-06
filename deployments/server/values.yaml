@@ -127,6 +127,9 @@ defaultCluster:
   registrationKey: default-cluster-registration-key-secret
   tenantId: default-tenant-id
 
+# The timeout for the component status check.
+componentStatusTimeout: 30m
+
 # Override the "cluster-manager-server.fullname" value. This value is used as part of
 # most of the names of the resources created by this Helm chart.
 # +docs:property

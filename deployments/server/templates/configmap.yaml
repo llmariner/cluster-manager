@@ -30,3 +30,4 @@ data:
       tenantId: {{ .Values.defaultCluster.tenantId }}
     usageSender:
       {{- toYaml .Values.global.usageSender | nindent 6 }}
+    componentStatusTimeout: {{ .Values.componentStatusTimeout }}

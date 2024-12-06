@@ -3,11 +3,14 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/llmariner/api-usage/pkg/sender"
 	"github.com/llmariner/common/pkg/db"
 	"gopkg.in/yaml.v3"
 )
+
+const defaultComponentStatusTimeout = 1 * time.Hour
 
 // DebugConfig is the debug configuration.
 type DebugConfig struct {
@@ -69,6 +72,8 @@ type Config struct {
 
 	UsageSender sender.Config `yaml:"usageSender"`
 
+	ComponentStatusTimeout time.Duration `yaml:"componentStatusTimeout"`
+
 	DefaultCluster DefaultClusterConfig `yaml:"defaultCluster"`
 }
 
@@ -108,6 +113,13 @@ func (c *Config) Validate() error {
 	if err := c.UsageSender.Validate(); err != nil {
 		return err
 	}
+
+	if c.ComponentStatusTimeout == 0 {
+		c.ComponentStatusTimeout = defaultComponentStatusTimeout
+	} else if c.ComponentStatusTimeout < 0 {
+		return fmt.Errorf("component status timeout must be greater than 0")
+	}
+
 	return nil
 }
 

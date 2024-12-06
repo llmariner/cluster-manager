@@ -96,7 +96,7 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
-	s := server.New(st, logger)
+	s := server.New(st, logger, c.ComponentStatusTimeout)
 
 	var usageSetter sender.UsageSetter
 	if c.UsageSender.Enable {

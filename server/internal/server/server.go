@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"time"
 
 	"github.com/go-logr/logr"
 	"github.com/llmariner/api-usage/pkg/sender"
@@ -25,16 +26,19 @@ const (
 )
 
 // New creates a server.
-func New(store *store.S, log logr.Logger) *S {
+func New(store *store.S, log logr.Logger, timeout time.Duration) *S {
 	return &S{
-		store: store,
-		log:   log.WithName("grpc"),
+		componentStatusTimeout: timeout,
+		store:                  store,
+		log:                    log.WithName("grpc"),
 	}
 }
 
 // S is a server.
 type S struct {
 	v1.UnimplementedClustersServiceServer
+
+	componentStatusTimeout time.Duration
 
 	srv   *grpc.Server
 	store *store.S
