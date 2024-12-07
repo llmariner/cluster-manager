@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
 )
 
@@ -73,6 +74,7 @@ func (s *ComponentStatusSender) send(ctx context.Context) error {
 		Name:   s.name,
 		Status: status,
 	}
+	ctx = auth.AppendWorkerAuthorization(ctx)
 	if _, err := s.client.UpdateComponentStatus(ctx, req); err != nil {
 		return fmt.Errorf("update component status: %s", err)
 	}
