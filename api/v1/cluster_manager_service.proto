@@ -98,7 +98,7 @@ message GetSelfClusterRequest {
 }
 
 message ComponentStatus {
-  bool isHealthy = 1;
+  bool is_healthy = 1;
   string message = 2;
 }
 
