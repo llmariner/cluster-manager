@@ -11,7 +11,7 @@ export type Cluster = {
   name?: string
   registrationKey?: string
   object?: string
-  componentsStatuses?: {[key: string]: ComponentStatus}
+  componentStatuses?: {[key: string]: ComponentStatus}
 }
 
 export type CreateClusterRequest = {

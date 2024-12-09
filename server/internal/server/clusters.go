@@ -81,7 +81,7 @@ func (s *S) ListClusters(
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
 		}
-		cProto.ComponentsStatuses = toComponentStatusesProto(coms, expiredAt)
+		cProto.ComponentStatuses = toComponentStatusesProto(coms, expiredAt)
 		clusterProtos = append(clusterProtos, cProto)
 	}
 	return &v1.ListClustersResponse{
@@ -117,7 +117,7 @@ func (s *S) GetCluster(
 		return nil, status.Errorf(codes.Internal, "find cluster components: %s", err)
 	}
 	expiredAt := time.Now().Add(-s.componentStatusTimeout)
-	cProto.ComponentsStatuses = toComponentStatusesProto(coms, expiredAt)
+	cProto.ComponentStatuses = toComponentStatusesProto(coms, expiredAt)
 	return cProto, nil
 }
 
