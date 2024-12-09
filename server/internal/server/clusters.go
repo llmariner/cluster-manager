@@ -271,6 +271,7 @@ func toComponentStatusesProto(cs []store.ClusterComponent, ts time.Time) map[str
 	for _, ccn := range store.ClusterComponentNames {
 		m[ccn] = &v1.ComponentStatus{
 			IsHealthy: false,
+			Message:   "no update received",
 		}
 	}
 	for _, c := range cs {
