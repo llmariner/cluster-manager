@@ -19,7 +19,7 @@ message Cluster {
   string object = 4;
 
   // components_statuses is keyed by component name.
-  map<string, ComponentStatus> components_statuses = 5;
+  map<string, ComponentStatus> component_statuses = 5;
 }
 
 message CreateClusterRequest {

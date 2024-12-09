@@ -5,7 +5,7 @@ export type Cluster = {
     name?: string;
     registrationKey?: string;
     object?: string;
-    componentsStatuses?: {
+    componentStatuses?: {
         [key: string]: ComponentStatus;
     };
 };

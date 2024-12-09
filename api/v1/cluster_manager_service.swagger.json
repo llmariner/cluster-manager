@@ -177,7 +177,7 @@
         "object": {
           "type": "string"
         },
-        "componentsStatuses": {
+        "componentStatuses": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/v1ComponentStatus"

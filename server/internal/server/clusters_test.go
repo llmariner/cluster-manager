@@ -34,14 +34,14 @@ func TestClusters(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Empty(t, c.RegistrationKey)
-	assert.Len(t, c.ComponentsStatuses, 4)
+	assert.Len(t, c.ComponentStatuses, 4)
 
 	listResp, err := srv.ListClusters(ctx, &v1.ListClustersRequest{})
 	assert.NoError(t, err)
 	assert.Len(t, listResp.Data, 1)
 	assert.Equal(t, c.Id, listResp.Data[0].Id)
 	assert.Empty(t, listResp.Data[0].RegistrationKey)
-	assert.Len(t, listResp.Data[0].ComponentsStatuses, 4)
+	assert.Len(t, listResp.Data[0].ComponentStatuses, 4)
 
 	ilistResp, err := isrv.ListInternalClusters(ctx, &v1.ListInternalClustersRequest{})
 	assert.NoError(t, err)
