@@ -85,9 +85,6 @@ export class ClustersInternalService {
   }
 }
 export class ClustersWorkerService {
-  static GetSelfCluster(req: GetSelfClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
-    return fm.fetchReq<GetSelfClusterRequest, Cluster>(`/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster`, {...initReq, method: "POST", body: JSON.stringify(req)})
-  }
   static UpdateComponentStatus(req: UpdateComponentStatusRequest, initReq?: fm.InitReq): Promise<GoogleProtobufEmpty.Empty> {
     return fm.fetchReq<UpdateComponentStatusRequest, GoogleProtobufEmpty.Empty>(`/llmariner.clusters.server.v1.ClustersWorkerService/UpdateComponentStatus`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }

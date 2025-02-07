@@ -24,9 +24,6 @@ export class ClustersInternalService {
     }
 }
 export class ClustersWorkerService {
-    static GetSelfCluster(req, initReq) {
-        return fm.fetchReq(`/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
-    }
     static UpdateComponentStatus(req, initReq) {
         return fm.fetchReq(`/llmariner.clusters.server.v1.ClustersWorkerService/UpdateComponentStatus`, Object.assign(Object.assign({}, initReq), { method: "POST", body: JSON.stringify(req) }));
     }
