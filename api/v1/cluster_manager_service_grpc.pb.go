@@ -300,8 +300,6 @@ var ClustersInternalService_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClustersWorkerServiceClient interface {
-	// GetSelfCluster returns the cluster to which the worker cluster itself belongs.
-	GetSelfCluster(ctx context.Context, in *GetSelfClusterRequest, opts ...grpc.CallOption) (*Cluster, error)
 	// UpdateComponentStatus updates the component's health status to the cluster.
 	UpdateComponentStatus(ctx context.Context, in *UpdateComponentStatusRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -312,15 +310,6 @@ type clustersWorkerServiceClient struct {
 
 func NewClustersWorkerServiceClient(cc grpc.ClientConnInterface) ClustersWorkerServiceClient {
 	return &clustersWorkerServiceClient{cc}
-}
-
-func (c *clustersWorkerServiceClient) GetSelfCluster(ctx context.Context, in *GetSelfClusterRequest, opts ...grpc.CallOption) (*Cluster, error) {
-	out := new(Cluster)
-	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *clustersWorkerServiceClient) UpdateComponentStatus(ctx context.Context, in *UpdateComponentStatusRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
@@ -336,8 +325,6 @@ func (c *clustersWorkerServiceClient) UpdateComponentStatus(ctx context.Context,
 // All implementations must embed UnimplementedClustersWorkerServiceServer
 // for forward compatibility
 type ClustersWorkerServiceServer interface {
-	// GetSelfCluster returns the cluster to which the worker cluster itself belongs.
-	GetSelfCluster(context.Context, *GetSelfClusterRequest) (*Cluster, error)
 	// UpdateComponentStatus updates the component's health status to the cluster.
 	UpdateComponentStatus(context.Context, *UpdateComponentStatusRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedClustersWorkerServiceServer()
@@ -347,9 +334,6 @@ type ClustersWorkerServiceServer interface {
 type UnimplementedClustersWorkerServiceServer struct {
 }
 
-func (UnimplementedClustersWorkerServiceServer) GetSelfCluster(context.Context, *GetSelfClusterRequest) (*Cluster, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSelfCluster not implemented")
-}
 func (UnimplementedClustersWorkerServiceServer) UpdateComponentStatus(context.Context, *UpdateComponentStatusRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateComponentStatus not implemented")
 }
@@ -364,24 +348,6 @@ type UnsafeClustersWorkerServiceServer interface {
 
 func RegisterClustersWorkerServiceServer(s grpc.ServiceRegistrar, srv ClustersWorkerServiceServer) {
 	s.RegisterService(&ClustersWorkerService_ServiceDesc, srv)
-}
-
-func _ClustersWorkerService_GetSelfCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSelfClusterRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClustersWorkerServiceServer).GetSelfCluster(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/llmariner.clusters.server.v1.ClustersWorkerService/GetSelfCluster",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersWorkerServiceServer).GetSelfCluster(ctx, req.(*GetSelfClusterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _ClustersWorkerService_UpdateComponentStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -409,10 +375,6 @@ var ClustersWorkerService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "llmariner.clusters.server.v1.ClustersWorkerService",
 	HandlerType: (*ClustersWorkerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetSelfCluster",
-			Handler:    _ClustersWorkerService_GetSelfCluster_Handler,
-		},
 		{
 			MethodName: "UpdateComponentStatus",
 			Handler:    _ClustersWorkerService_UpdateComponentStatus_Handler,

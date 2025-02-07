@@ -108,9 +108,6 @@ message UpdateComponentStatusRequest {
 }
 
 service ClustersWorkerService {
-  // GetSelfCluster returns the cluster to which the worker cluster itself belongs.
-  rpc GetSelfCluster(GetSelfClusterRequest) returns (Cluster);
-
   // UpdateComponentStatus updates the component's health status to the cluster.
   rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (google.protobuf.Empty) {}
 }

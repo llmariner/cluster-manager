@@ -67,25 +67,6 @@ func TestClusters(t *testing.T) {
 	assert.Len(t, listResp.Data, 0)
 }
 
-func TestGetSelfCluster(t *testing.T) {
-	st, tearDown := store.NewTest(t)
-	defer tearDown()
-
-	wsrv := NewWorkerServiceServer(st, testr.New(t))
-	ctx := fakeAuthInto(context.Background())
-
-	_, err := st.CreateCluster(store.ClusterSpec{
-		Name:      "cluster",
-		ClusterID: defaultClusterID,
-		TenantID:  defaultTenantID,
-	})
-	assert.NoError(t, err)
-
-	c, err := wsrv.GetSelfCluster(ctx, &v1.GetSelfClusterRequest{})
-	assert.NoError(t, err)
-	assert.Equal(t, "cluster", c.Name)
-}
-
 func TestCreateDefaultCluster(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()

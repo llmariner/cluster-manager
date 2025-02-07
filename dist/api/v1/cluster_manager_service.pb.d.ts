@@ -55,6 +55,5 @@ export declare class ClustersInternalService {
     static ListInternalClusters(req: ListInternalClustersRequest, initReq?: fm.InitReq): Promise<ListInternalClustersResponse>;
 }
 export declare class ClustersWorkerService {
-    static GetSelfCluster(req: GetSelfClusterRequest, initReq?: fm.InitReq): Promise<Cluster>;
     static UpdateComponentStatus(req: UpdateComponentStatusRequest, initReq?: fm.InitReq): Promise<GoogleProtobufEmpty.Empty>;
 }
