@@ -124,7 +124,8 @@ internalGrpcPort: 8083
 # be registered upon server startup.
 defaultCluster:
   name: Default
-  registrationKey: default-cluster-registration-key-secret
+  # Registration key secret. Must start with "clusterkey-".
+  registrationKey: clusterkey-default-key-secret
   tenantId: default-tenant-id
 
 # The timeout for the component status check.
