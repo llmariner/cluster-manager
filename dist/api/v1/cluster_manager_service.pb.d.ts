@@ -3,9 +3,9 @@ import * as GoogleProtobufEmpty from "../../google/protobuf/empty.pb";
 export type Cluster = {
     id?: string;
     name?: string;
-    registrationKey?: string;
+    registration_key?: string;
     object?: string;
-    componentStatuses?: {
+    component_statuses?: {
         [key: string]: ComponentStatus;
     };
 };
@@ -30,7 +30,7 @@ export type DeleteClusterResponse = {
 };
 export type InternalCluster = {
     cluster?: Cluster;
-    tenantId?: string;
+    tenant_id?: string;
 };
 export type ListInternalClustersRequest = {};
 export type ListInternalClustersResponse = {
@@ -38,7 +38,7 @@ export type ListInternalClustersResponse = {
 };
 export type GetSelfClusterRequest = {};
 export type ComponentStatus = {
-    isHealthy?: boolean;
+    is_healthy?: boolean;
     message?: string;
 };
 export type UpdateComponentStatusRequest = {
