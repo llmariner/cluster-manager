@@ -47,7 +47,7 @@ func TestCluster(t *testing.T) {
 
 	cs, err := st.FindClusterComponents(clusterID)
 	assert.NoError(t, err)
-	assert.Len(t, cs, 4)
+	assert.Len(t, cs, 5)
 
 	_, err = st.CreateCluster(ClusterSpec{
 		ClusterID: "f1",
