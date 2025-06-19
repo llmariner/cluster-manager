@@ -27,6 +27,7 @@ type ClusterSpec struct {
 
 // ClusterComponentNames is the names of cluster components.
 var ClusterComponentNames = []string{
+	"cluster-monitor-agent",
 	"inference-manager-engine",
 	"model-manager-loader",
 	"session-manager-agent",
