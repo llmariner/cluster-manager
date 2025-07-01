@@ -5,6 +5,7 @@
 */
 
 import * as fm from "../../fetch.pb"
+import * as GoogleProtobufEmpty from "../../google/protobuf/empty.pb"
 export type ComponentStatus = {
   is_healthy?: boolean
   message?: string
@@ -44,6 +45,27 @@ export type DeleteClusterResponse = {
   deleted?: boolean
 }
 
+export type ClusterConfig = {
+}
+
+export type CreateClusterConfigRequest = {
+  cluster_id?: string
+  dummy?: string
+}
+
+export type GetClusterConfigRequest = {
+  cluster_id?: string
+}
+
+export type UpdateClusterConfigRequest = {
+  cluster_id?: string
+  dummy?: string
+}
+
+export type DeleteClusterConfigRequest = {
+  cluster_id?: string
+}
+
 export class ClustersService {
   static CreateCluster(req: CreateClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
     return fm.fetchReq<CreateClusterRequest, Cluster>(`/v1/clusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
@@ -56,5 +78,17 @@ export class ClustersService {
   }
   static DeleteCluster(req: DeleteClusterRequest, initReq?: fm.InitReq): Promise<DeleteClusterResponse> {
     return fm.fetchReq<DeleteClusterRequest, DeleteClusterResponse>(`/v1/clusters/${req["id"]}`, {...initReq, method: "DELETE"})
+  }
+  static CreateClusterConfig(req: CreateClusterConfigRequest, initReq?: fm.InitReq): Promise<ClusterConfig> {
+    return fm.fetchReq<CreateClusterConfigRequest, ClusterConfig>(`/v1/clusters/${req["cluster_id"]}/config`, {...initReq, method: "POST", body: JSON.stringify(req)})
+  }
+  static GetClusterConfig(req: GetClusterConfigRequest, initReq?: fm.InitReq): Promise<ClusterConfig> {
+    return fm.fetchReq<GetClusterConfigRequest, ClusterConfig>(`/v1/clusters/${req["cluster_id"]}/config?${fm.renderURLSearchParams(req, ["cluster_id"])}`, {...initReq, method: "GET"})
+  }
+  static UpdateClusterConfig(req: UpdateClusterConfigRequest, initReq?: fm.InitReq): Promise<ClusterConfig> {
+    return fm.fetchReq<UpdateClusterConfigRequest, ClusterConfig>(`/v1/clusters/${req["cluster_id"]}/config`, {...initReq, method: "PATCH", body: JSON.stringify(req)})
+  }
+  static DeleteClusterConfig(req: DeleteClusterConfigRequest, initReq?: fm.InitReq): Promise<GoogleProtobufEmpty.Empty> {
+    return fm.fetchReq<DeleteClusterConfigRequest, GoogleProtobufEmpty.Empty>(`/v1/clusters/${req["cluster_id"]}/config`, {...initReq, method: "DELETE"})
   }
 }
