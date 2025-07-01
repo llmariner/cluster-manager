@@ -3,10 +3,13 @@ syntax = "proto3";
 package llmariner.clusters.server.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
 
 option go_package = "github.com/llmariner/cluster-manager/api/v1";
 
+message ComponentStatus {
+  bool is_healthy = 1;
+  string message = 2;
+}
 
 message Cluster {
   string id = 1;
@@ -48,18 +51,6 @@ message DeleteClusterResponse {
   bool deleted = 3;
 }
 
-message InternalCluster {
-  Cluster cluster = 1;
-  string tenant_id = 2;
-}
-
-message ListInternalClustersRequest {
-}
-
-message ListInternalClustersResponse {
-  repeated InternalCluster clusters = 1;
-}
-
 service ClustersService {
 
   rpc CreateCluster(CreateClusterRequest) returns (Cluster) {
@@ -88,26 +79,20 @@ service ClustersService {
   }
 }
 
+message InternalCluster {
+  Cluster cluster = 1;
+  string tenant_id = 2;
+}
+
+message ListInternalClustersRequest {
+}
+
+message ListInternalClustersResponse {
+  repeated InternalCluster clusters = 1;
+}
+
 service ClustersInternalService {
   rpc ListInternalClusters(ListInternalClustersRequest) returns (ListInternalClustersResponse) {
   }
 
-}
-
-message GetSelfClusterRequest {
-}
-
-message ComponentStatus {
-  bool is_healthy = 1;
-  string message = 2;
-}
-
-message UpdateComponentStatusRequest {
-  string name = 1;
-  ComponentStatus status = 2;
-}
-
-service ClustersWorkerService {
-  // UpdateComponentStatus updates the component's health status to the cluster.
-  rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (google.protobuf.Empty) {}
 }
