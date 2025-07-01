@@ -1,0 +1,106 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/v1/cluster_manager_server_internal.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ClustersInternalService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Cluster": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "registrationKey": {
+          "type": "string",
+          "description": "registration_key is the key used to register the cluster. Only populated\nwhen a new cluster is created or from internal gRPC service."
+        },
+        "object": {
+          "type": "string"
+        },
+        "componentStatuses": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1ComponentStatus"
+          },
+          "description": "components_statuses is keyed by component name."
+        }
+      }
+    },
+    "v1ComponentStatus": {
+      "type": "object",
+      "properties": {
+        "isHealthy": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InternalCluster": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "$ref": "#/definitions/v1Cluster"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ListInternalClustersResponse": {
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1InternalCluster"
+          }
+        }
+      }
+    }
+  }
+}
