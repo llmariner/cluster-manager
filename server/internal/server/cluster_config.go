@@ -92,7 +92,7 @@ func (s *S) DeleteClusterConfig(
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, status.Errorf(codes.NotFound, "config for cluster %q not found", req.ClusterId)
 		}
-		return nil, status.Errorf(codes.Internal, "get cluster config: %s", err)
+		return nil, status.Errorf(codes.Internal, "delete cluster config: %s", err)
 	}
 
 	return &emptypb.Empty{}, nil
