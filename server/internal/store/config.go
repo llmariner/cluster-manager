@@ -12,7 +12,7 @@ type ClusterConfig struct {
 	Message []byte
 }
 
-// CreateClusterConfig creates a new ClusterConfig in the database.x
+// CreateClusterConfig creates a new ClusterConfig in the database.
 func (s *S) CreateClusterConfig(config *ClusterConfig) error {
 	if err := s.db.Create(config).Error; err != nil {
 		return err
