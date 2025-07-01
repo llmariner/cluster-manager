@@ -7,6 +7,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,6 +23,10 @@ type ClustersServiceClient interface {
 	ListClusters(ctx context.Context, in *ListClustersRequest, opts ...grpc.CallOption) (*ListClustersResponse, error)
 	GetCluster(ctx context.Context, in *GetClusterRequest, opts ...grpc.CallOption) (*Cluster, error)
 	DeleteCluster(ctx context.Context, in *DeleteClusterRequest, opts ...grpc.CallOption) (*DeleteClusterResponse, error)
+	CreateClusterConfig(ctx context.Context, in *CreateClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error)
+	GetClusterConfig(ctx context.Context, in *GetClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error)
+	UpdateClusterConfig(ctx context.Context, in *UpdateClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error)
+	DeleteClusterConfig(ctx context.Context, in *DeleteClusterConfigRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type clustersServiceClient struct {
@@ -68,6 +73,42 @@ func (c *clustersServiceClient) DeleteCluster(ctx context.Context, in *DeleteClu
 	return out, nil
 }
 
+func (c *clustersServiceClient) CreateClusterConfig(ctx context.Context, in *CreateClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error) {
+	out := new(ClusterConfig)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/CreateClusterConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clustersServiceClient) GetClusterConfig(ctx context.Context, in *GetClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error) {
+	out := new(ClusterConfig)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/GetClusterConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clustersServiceClient) UpdateClusterConfig(ctx context.Context, in *UpdateClusterConfigRequest, opts ...grpc.CallOption) (*ClusterConfig, error) {
+	out := new(ClusterConfig)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/UpdateClusterConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clustersServiceClient) DeleteClusterConfig(ctx context.Context, in *DeleteClusterConfigRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersService/DeleteClusterConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClustersServiceServer is the server API for ClustersService service.
 // All implementations must embed UnimplementedClustersServiceServer
 // for forward compatibility
@@ -76,6 +117,10 @@ type ClustersServiceServer interface {
 	ListClusters(context.Context, *ListClustersRequest) (*ListClustersResponse, error)
 	GetCluster(context.Context, *GetClusterRequest) (*Cluster, error)
 	DeleteCluster(context.Context, *DeleteClusterRequest) (*DeleteClusterResponse, error)
+	CreateClusterConfig(context.Context, *CreateClusterConfigRequest) (*ClusterConfig, error)
+	GetClusterConfig(context.Context, *GetClusterConfigRequest) (*ClusterConfig, error)
+	UpdateClusterConfig(context.Context, *UpdateClusterConfigRequest) (*ClusterConfig, error)
+	DeleteClusterConfig(context.Context, *DeleteClusterConfigRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedClustersServiceServer()
 }
 
@@ -94,6 +139,18 @@ func (UnimplementedClustersServiceServer) GetCluster(context.Context, *GetCluste
 }
 func (UnimplementedClustersServiceServer) DeleteCluster(context.Context, *DeleteClusterRequest) (*DeleteClusterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCluster not implemented")
+}
+func (UnimplementedClustersServiceServer) CreateClusterConfig(context.Context, *CreateClusterConfigRequest) (*ClusterConfig, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateClusterConfig not implemented")
+}
+func (UnimplementedClustersServiceServer) GetClusterConfig(context.Context, *GetClusterConfigRequest) (*ClusterConfig, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetClusterConfig not implemented")
+}
+func (UnimplementedClustersServiceServer) UpdateClusterConfig(context.Context, *UpdateClusterConfigRequest) (*ClusterConfig, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateClusterConfig not implemented")
+}
+func (UnimplementedClustersServiceServer) DeleteClusterConfig(context.Context, *DeleteClusterConfigRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteClusterConfig not implemented")
 }
 func (UnimplementedClustersServiceServer) mustEmbedUnimplementedClustersServiceServer() {}
 
@@ -180,6 +237,78 @@ func _ClustersService_DeleteCluster_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClustersService_CreateClusterConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateClusterConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClustersServiceServer).CreateClusterConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/CreateClusterConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClustersServiceServer).CreateClusterConfig(ctx, req.(*CreateClusterConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClustersService_GetClusterConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetClusterConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClustersServiceServer).GetClusterConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/GetClusterConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClustersServiceServer).GetClusterConfig(ctx, req.(*GetClusterConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClustersService_UpdateClusterConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateClusterConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClustersServiceServer).UpdateClusterConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/UpdateClusterConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClustersServiceServer).UpdateClusterConfig(ctx, req.(*UpdateClusterConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClustersService_DeleteClusterConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteClusterConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClustersServiceServer).DeleteClusterConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/llmariner.clusters.server.v1.ClustersService/DeleteClusterConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClustersServiceServer).DeleteClusterConfig(ctx, req.(*DeleteClusterConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClustersService_ServiceDesc is the grpc.ServiceDesc for ClustersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +331,22 @@ var ClustersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCluster",
 			Handler:    _ClustersService_DeleteCluster_Handler,
+		},
+		{
+			MethodName: "CreateClusterConfig",
+			Handler:    _ClustersService_CreateClusterConfig_Handler,
+		},
+		{
+			MethodName: "GetClusterConfig",
+			Handler:    _ClustersService_GetClusterConfig_Handler,
+		},
+		{
+			MethodName: "UpdateClusterConfig",
+			Handler:    _ClustersService_UpdateClusterConfig_Handler,
+		},
+		{
+			MethodName: "DeleteClusterConfig",
+			Handler:    _ClustersService_DeleteClusterConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

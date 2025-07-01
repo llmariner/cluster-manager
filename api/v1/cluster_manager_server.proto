@@ -3,6 +3,7 @@ syntax = "proto3";
 package llmariner.clusters.server.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/llmariner/cluster-manager/api/v1";
 
@@ -51,6 +52,32 @@ message DeleteClusterResponse {
   bool deleted = 3;
 }
 
+message ClusterConfig {
+  // TODO(kenji): Add fields
+}
+
+message CreateClusterConfigRequest {
+  string cluster_id = 1;
+
+  // TODO(kenji): Add fields
+  string dummy = 2;
+}
+
+message GetClusterConfigRequest {
+  string cluster_id = 1;
+}
+
+message UpdateClusterConfigRequest {
+  string cluster_id = 1;
+
+  // TODO(kenji): Add fields
+  string dummy = 2;
+}
+
+message DeleteClusterConfigRequest {
+  string cluster_id = 1;
+}
+
 service ClustersService {
 
   rpc CreateCluster(CreateClusterRequest) returns (Cluster) {
@@ -75,6 +102,32 @@ service ClustersService {
   rpc DeleteCluster(DeleteClusterRequest) returns (DeleteClusterResponse) {
     option (google.api.http) = {
       delete: "/v1/clusters/{id}"
+    };
+  }
+
+  rpc CreateClusterConfig(CreateClusterConfigRequest) returns (ClusterConfig) {
+    option (google.api.http) = {
+      post: "/v1/clusters/{cluster_id}/config"
+      body: "*"
+    };
+  }
+
+  rpc GetClusterConfig(GetClusterConfigRequest) returns (ClusterConfig) {
+    option (google.api.http) = {
+      get: "/v1/clusters/{cluster_id}/config"
+    };
+  }
+
+  rpc UpdateClusterConfig(UpdateClusterConfigRequest) returns (ClusterConfig) {
+    option (google.api.http) = {
+      patch: "/v1/clusters/{cluster_id}/config"
+      body: "*"
+    };
+  }
+
+  rpc DeleteClusterConfig(DeleteClusterConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/clusters/{cluster_id}/config"
     };
   }
 }
