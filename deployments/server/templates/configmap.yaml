@@ -10,6 +10,7 @@ data:
     grpcPort: {{ .Values.grpcPort }}
     workerServiceGrpcPort: {{ .Values.workerServiceGrpcPort }}
     internalGrpcPort: {{ .Values.internalGrpcPort }}
+    sessionManagerServerEndpoint: {{ .Values.sessionManagerServerEndpoint }}
     database:
       host: {{ .Values.global.database.host }}
       port: {{ .Values.global.database.port }}

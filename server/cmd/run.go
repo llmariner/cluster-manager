@@ -12,6 +12,7 @@ import (
 	"github.com/llmariner/api-usage/pkg/sender"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/k8s"
 	"github.com/llmariner/cluster-manager/server/internal/server"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	"github.com/llmariner/common/pkg/db"
@@ -71,6 +72,9 @@ func run(ctx context.Context, c *config.Config) error {
 	if err := st.AutoMigrate(); err != nil {
 		return err
 	}
+
+	k8sClientFactory := k8s.NewClientFactory(c.SessionManagerServerEndpoint)
+	fmt.Printf("%+v\n", k8sClientFactory)
 
 	addr := fmt.Sprintf("localhost:%d", c.GRPCPort)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}

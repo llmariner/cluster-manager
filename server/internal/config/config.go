@@ -64,6 +64,8 @@ type Config struct {
 	WorkerServiceGRPCPort int `yaml:"workerServiceGrpcPort"`
 	InternalGRPCPort      int `yaml:"internalGrpcPort"`
 
+	SessionManagerServerEndpoint string `yaml:"sessionManagerServerEndpoint"`
+
 	Database db.Config `yaml:"database"`
 
 	Debug DebugConfig `yaml:"debug"`
@@ -90,6 +92,10 @@ func (c *Config) Validate() error {
 	}
 	if c.InternalGRPCPort <= 0 {
 		return fmt.Errorf("internalGrpcPort must be greater than 0")
+	}
+
+	if c.SessionManagerServerEndpoint == "" {
+		return fmt.Errorf("session manager server endpoint must be set")
 	}
 
 	if c.Debug.Standalone {
