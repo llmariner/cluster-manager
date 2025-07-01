@@ -14,10 +14,12 @@ type ClusterComponent struct {
 	StatusMessage string
 }
 
-// CreateClusterComponent creates a new cluster component in the store
+// CreateClusterComponent creates a new cluster component in the store.
 func CreateClusterComponent(tx *gorm.DB, c *ClusterComponent) error {
-	res := tx.Create(c)
-	return res.Error
+	if err := tx.Create(c).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 // UpdateOrCreateClusterComponent sets the appropriate cluster component fields in the
