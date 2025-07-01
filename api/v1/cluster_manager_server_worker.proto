@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package llmariner.clusters.server.v1;
+
+import "google/protobuf/empty.proto";
+import "api/v1/cluster_manager_server.proto";
+
+option go_package = "github.com/llmariner/cluster-manager/api/v1";
+
+message UpdateComponentStatusRequest {
+  string name = 1;
+  ComponentStatus status = 2;
+}
+
+service ClustersWorkerService {
+  // UpdateComponentStatus updates the component's health status to the cluster.
+  rpc UpdateComponentStatus(UpdateComponentStatusRequest) returns (google.protobuf.Empty) {}
+}

@@ -7,7 +7,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -206,7 +205,7 @@ var ClustersService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/v1/cluster_manager_service.proto",
+	Metadata: "api/v1/cluster_manager_server.proto",
 }
 
 // ClustersInternalServiceClient is the client API for ClustersInternalService service.
@@ -293,93 +292,5 @@ var ClustersInternalService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/v1/cluster_manager_service.proto",
-}
-
-// ClustersWorkerServiceClient is the client API for ClustersWorkerService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ClustersWorkerServiceClient interface {
-	// UpdateComponentStatus updates the component's health status to the cluster.
-	UpdateComponentStatus(ctx context.Context, in *UpdateComponentStatusRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-}
-
-type clustersWorkerServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewClustersWorkerServiceClient(cc grpc.ClientConnInterface) ClustersWorkerServiceClient {
-	return &clustersWorkerServiceClient{cc}
-}
-
-func (c *clustersWorkerServiceClient) UpdateComponentStatus(ctx context.Context, in *UpdateComponentStatusRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/llmariner.clusters.server.v1.ClustersWorkerService/UpdateComponentStatus", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ClustersWorkerServiceServer is the server API for ClustersWorkerService service.
-// All implementations must embed UnimplementedClustersWorkerServiceServer
-// for forward compatibility
-type ClustersWorkerServiceServer interface {
-	// UpdateComponentStatus updates the component's health status to the cluster.
-	UpdateComponentStatus(context.Context, *UpdateComponentStatusRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedClustersWorkerServiceServer()
-}
-
-// UnimplementedClustersWorkerServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedClustersWorkerServiceServer struct {
-}
-
-func (UnimplementedClustersWorkerServiceServer) UpdateComponentStatus(context.Context, *UpdateComponentStatusRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateComponentStatus not implemented")
-}
-func (UnimplementedClustersWorkerServiceServer) mustEmbedUnimplementedClustersWorkerServiceServer() {}
-
-// UnsafeClustersWorkerServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ClustersWorkerServiceServer will
-// result in compilation errors.
-type UnsafeClustersWorkerServiceServer interface {
-	mustEmbedUnimplementedClustersWorkerServiceServer()
-}
-
-func RegisterClustersWorkerServiceServer(s grpc.ServiceRegistrar, srv ClustersWorkerServiceServer) {
-	s.RegisterService(&ClustersWorkerService_ServiceDesc, srv)
-}
-
-func _ClustersWorkerService_UpdateComponentStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateComponentStatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClustersWorkerServiceServer).UpdateComponentStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/llmariner.clusters.server.v1.ClustersWorkerService/UpdateComponentStatus",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersWorkerServiceServer).UpdateComponentStatus(ctx, req.(*UpdateComponentStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// ClustersWorkerService_ServiceDesc is the grpc.ServiceDesc for ClustersWorkerService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var ClustersWorkerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "llmariner.clusters.server.v1.ClustersWorkerService",
-	HandlerType: (*ClustersWorkerServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "UpdateComponentStatus",
-			Handler:    _ClustersWorkerService_UpdateComponentStatus_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/v1/cluster_manager_service.proto",
+	Metadata: "api/v1/cluster_manager_server.proto",
 }

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package llmariner.clusters.server.v1;
+
+import "api/v1/cluster_manager_server.proto";
+
+option go_package = "github.com/llmariner/cluster-manager/api/v1";
+
+message InternalCluster {
+  Cluster cluster = 1;
+  string tenant_id = 2;
+}
+
+message ListInternalClustersRequest {
+}
+
+message ListInternalClustersResponse {
+  repeated InternalCluster clusters = 1;
+}
+
+service ClustersInternalService {
+  rpc ListInternalClusters(ListInternalClustersRequest) returns (ListInternalClustersResponse) {
+  }
+
+}
