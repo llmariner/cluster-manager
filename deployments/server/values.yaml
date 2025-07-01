@@ -120,6 +120,9 @@ workerServiceGrpcPort: 8082
 # +docs:type=number
 internalGrpcPort: 8083
 
+# The endpoint of the session-manager-server to call the Kubernetes APIs of the worker.
+sessionManagerServerEndpoint: http://session-manager-server-http:8080/v1
+
 # Optional default cluster data. If this value is set, the cluster will
 # be registered upon server startup.
 defaultCluster:
