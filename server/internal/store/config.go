@@ -20,7 +20,7 @@ func (s *S) CreateClusterConfig(config *ClusterConfig) error {
 	return nil
 }
 
-// GetClusterConfig retrieves a ClusterConfig its ClusterID.
+// GetClusterConfig retrieves a ClusterConfig by its ClusterID.
 func (s *S) GetClusterConfig(clusterID string) (*ClusterConfig, error) {
 	var config ClusterConfig
 	if err := s.db.Where("cluster_id = ?", clusterID).First(&config).Error; err != nil {
