@@ -78,21 +78,3 @@ service ClustersService {
     };
   }
 }
-
-message InternalCluster {
-  Cluster cluster = 1;
-  string tenant_id = 2;
-}
-
-message ListInternalClustersRequest {
-}
-
-message ListInternalClustersResponse {
-  repeated InternalCluster clusters = 1;
-}
-
-service ClustersInternalService {
-  rpc ListInternalClusters(ListInternalClustersRequest) returns (ListInternalClustersResponse) {
-  }
-
-}

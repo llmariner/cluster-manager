@@ -44,18 +44,6 @@ export type DeleteClusterResponse = {
   deleted?: boolean
 }
 
-export type InternalCluster = {
-  cluster?: Cluster
-  tenant_id?: string
-}
-
-export type ListInternalClustersRequest = {
-}
-
-export type ListInternalClustersResponse = {
-  clusters?: InternalCluster[]
-}
-
 export class ClustersService {
   static CreateCluster(req: CreateClusterRequest, initReq?: fm.InitReq): Promise<Cluster> {
     return fm.fetchReq<CreateClusterRequest, Cluster>(`/v1/clusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
@@ -68,10 +56,5 @@ export class ClustersService {
   }
   static DeleteCluster(req: DeleteClusterRequest, initReq?: fm.InitReq): Promise<DeleteClusterResponse> {
     return fm.fetchReq<DeleteClusterRequest, DeleteClusterResponse>(`/v1/clusters/${req["id"]}`, {...initReq, method: "DELETE"})
-  }
-}
-export class ClustersInternalService {
-  static ListInternalClusters(req: ListInternalClustersRequest, initReq?: fm.InitReq): Promise<ListInternalClustersResponse> {
-    return fm.fetchReq<ListInternalClustersRequest, ListInternalClustersResponse>(`/llmariner.clusters.server.v1.ClustersInternalService/ListInternalClusters`, {...initReq, method: "POST", body: JSON.stringify(req)})
   }
 }

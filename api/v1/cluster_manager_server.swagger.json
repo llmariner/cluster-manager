@@ -7,9 +7,6 @@
   "tags": [
     {
       "name": "ClustersService"
-    },
-    {
-      "name": "ClustersInternalService"
     }
   ],
   "consumes": [
@@ -216,17 +213,6 @@
         }
       }
     },
-    "v1InternalCluster": {
-      "type": "object",
-      "properties": {
-        "cluster": {
-          "$ref": "#/definitions/v1Cluster"
-        },
-        "tenantId": {
-          "type": "string"
-        }
-      }
-    },
     "v1ListClustersResponse": {
       "type": "object",
       "properties": {
@@ -237,17 +223,6 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1Cluster"
-          }
-        }
-      }
-    },
-    "v1ListInternalClustersResponse": {
-      "type": "object",
-      "properties": {
-        "clusters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1InternalCluster"
           }
         }
       }
