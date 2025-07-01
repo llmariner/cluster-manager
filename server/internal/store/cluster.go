@@ -1,6 +1,8 @@
 package store
 
 import (
+	"errors"
+
 	"gorm.io/gorm"
 )
 
@@ -107,6 +109,17 @@ func (s *S) DeleteCluster(clusterID, tenantID string) error {
 		if res.RowsAffected == 0 {
 			return gorm.ErrRecordNotFound
 		}
-		return DeleteClusterComponents(tx, clusterID)
+
+		if err := DeleteClusterComponents(tx, clusterID); err != nil {
+			return err
+		}
+
+		if err := deleteClusterConfigInTransaction(tx, clusterID); err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+			// Ignore.
+		}
+		return nil
 	})
 }

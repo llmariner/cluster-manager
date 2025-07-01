@@ -13,7 +13,7 @@ func TestCluster(t *testing.T) {
 	defer tearDown()
 
 	const (
-		clusterID = "f0"
+		clusterID = "c0"
 		tenantID  = "tid0"
 	)
 
