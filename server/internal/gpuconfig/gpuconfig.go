@@ -1,21 +1,21 @@
 package gpuconfig
 
 import (
-	v1 "github.com/NVIDIA/k8s-device-plugin/api/config/v1"
+	nv1 "github.com/NVIDIA/k8s-device-plugin/api/config/v1"
 )
 
-// timeSlicing returns a v1.Config that configures the NVIDIA GPU device plugin for time slicing.
+// CreateTimeSlicingDevicePluginConfig returns a v1.Config that configures the NVIDIA GPU device plugin for time slicing.
 //
 // Link: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html
-func timeSlicingDevicePluginConfig(gpus int) *v1.Config {
-	return &v1.Config{
-		Flags: v1.Flags{
-			CommandLineFlags: v1.CommandLineFlags{
-				MigStrategy: strPtr(v1.MigStrategyNone),
+func CreateTimeSlicingDevicePluginConfig(gpus int) *nv1.Config {
+	return &nv1.Config{
+		Flags: nv1.Flags{
+			CommandLineFlags: nv1.CommandLineFlags{
+				MigStrategy: strPtr(nv1.MigStrategyNone),
 			},
 		},
-		Sharing: v1.Sharing{
-			TimeSlicing: v1.ReplicatedResources{
+		Sharing: nv1.Sharing{
+			TimeSlicing: nv1.ReplicatedResources{
 				// Keep the original resource name. When set to true, each resource is advertised under
 				// the name <resource-name>.shared instead of <resource-name>.
 				RenameByDefault: false,
@@ -30,7 +30,7 @@ func timeSlicingDevicePluginConfig(gpus int) *v1.Config {
 				// When set to true, a resource request for more than one GPU fails with an UnexpectedAdmissionError.
 				// In this case, you must manually delete the pod, update the resource request, and redeploy.
 				FailRequestsGreaterThanOne: true,
-				Resources: []v1.ReplicatedResource{
+				Resources: []nv1.ReplicatedResource{
 					{
 						Name:     "nvidia.com/gpu",
 						Replicas: gpus,

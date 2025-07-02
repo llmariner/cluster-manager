@@ -2,10 +2,10 @@ package gpuconfig
 
 import (
 	"context"
-	"encoding/json"
 
 	nv1 "github.com/NVIDIA/k8s-device-plugin/api/config/v1"
 	"github.com/llmariner/cluster-manager/server/internal/k8s"
+	"gopkg.in/yaml.v2"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
@@ -40,7 +40,7 @@ type Manager struct {
 
 // CreateOrUpdateConfigMap creates or updates the ConfigMap for the NVIDIA GPU Device Plugin configuration.
 func (m *Manager) CreateOrUpdateConfigMap(ctx context.Context, dpconfig *nv1.Config) error {
-	dpConfigBytes, err := json.Marshal(dpconfig)
+	dpConfigBytes, err := yaml.Marshal(dpconfig)
 	if err != nil {
 		return err
 	}
