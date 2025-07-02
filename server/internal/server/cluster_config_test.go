@@ -25,6 +25,11 @@ func TestClusterConfig(t *testing.T) {
 
 	_, err = srv.CreateClusterConfig(ctx, &v1.CreateClusterConfigRequest{
 		ClusterId: c.Id,
+		DevicePluginConfig: &v1.DevicePluginConfig{
+			TimeSlicing: &v1.DevicePluginConfig_TimeSlicing{
+				Gpus: 2,
+			},
+		},
 	})
 	assert.NoError(t, err)
 
@@ -40,6 +45,12 @@ func TestClusterConfig(t *testing.T) {
 }
 
 func TestCreateClusterConfig(t *testing.T) {
+	dpconfig := &v1.DevicePluginConfig{
+		TimeSlicing: &v1.DevicePluginConfig_TimeSlicing{
+			Gpus: 2,
+		},
+	}
+
 	tcs := []struct {
 		name    string
 		reqF    func(clusterID string) *v1.CreateClusterConfigRequest
@@ -49,7 +60,8 @@ func TestCreateClusterConfig(t *testing.T) {
 			name: "success",
 			reqF: func(clusterID string) *v1.CreateClusterConfigRequest {
 				return &v1.CreateClusterConfigRequest{
-					ClusterId: clusterID,
+					ClusterId:          clusterID,
+					DevicePluginConfig: dpconfig,
 				}
 			},
 		},
@@ -57,7 +69,8 @@ func TestCreateClusterConfig(t *testing.T) {
 			name: "empty cluster ID",
 			reqF: func(clusterID string) *v1.CreateClusterConfigRequest {
 				return &v1.CreateClusterConfigRequest{
-					ClusterId: "",
+					ClusterId:          "",
+					DevicePluginConfig: dpconfig,
 				}
 			},
 			wantErr: true,
@@ -66,7 +79,22 @@ func TestCreateClusterConfig(t *testing.T) {
 			name: "non-existent cluster ID",
 			reqF: func(clusterID string) *v1.CreateClusterConfigRequest {
 				return &v1.CreateClusterConfigRequest{
-					ClusterId: "non-existent-cluster",
+					ClusterId:          "non-existent-cluster",
+					DevicePluginConfig: dpconfig,
+				}
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid device plugin config",
+			reqF: func(clusterID string) *v1.CreateClusterConfigRequest {
+				return &v1.CreateClusterConfigRequest{
+					ClusterId: clusterID,
+					DevicePluginConfig: &v1.DevicePluginConfig{
+						TimeSlicing: &v1.DevicePluginConfig_TimeSlicing{
+							Gpus: -1, // Invalid value
+						},
+					},
 				}
 			},
 			wantErr: true,

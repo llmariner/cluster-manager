@@ -155,9 +155,8 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dummy": {
-                  "type": "string",
-                  "title": "TODO(kenji): Add fields"
+                "devicePluginConfig": {
+                  "$ref": "#/definitions/v1DevicePluginConfig"
                 }
               }
             }
@@ -197,9 +196,8 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dummy": {
-                  "type": "string",
-                  "title": "TODO(kenji): Add fields"
+                "devicePluginConfig": {
+                  "$ref": "#/definitions/v1DevicePluginConfig"
                 }
               }
             }
@@ -270,6 +268,15 @@
     }
   },
   "definitions": {
+    "DevicePluginConfigTimeSlicing": {
+      "type": "object",
+      "properties": {
+        "gpus": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -323,7 +330,18 @@
       }
     },
     "v1ClusterConfig": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "devicePluginConfig": {
+          "$ref": "#/definitions/v1DevicePluginConfig"
+        },
+        "devicePluginConfigmapName": {
+          "type": "string"
+        },
+        "devicePluginConfigmapNamespace": {
+          "type": "string"
+        }
+      }
     },
     "v1ComponentStatus": {
       "type": "object",
@@ -357,6 +375,15 @@
           "type": "boolean"
         }
       }
+    },
+    "v1DevicePluginConfig": {
+      "type": "object",
+      "properties": {
+        "timeSlicing": {
+          "$ref": "#/definitions/DevicePluginConfigTimeSlicing"
+        }
+      },
+      "description": "Follow https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html."
     },
     "v1ListClustersResponse": {
       "type": "object",

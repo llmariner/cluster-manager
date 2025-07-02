@@ -45,12 +45,23 @@ export type DeleteClusterResponse = {
   deleted?: boolean
 }
 
+export type DevicePluginConfigTimeSlicing = {
+  gpus?: number
+}
+
+export type DevicePluginConfig = {
+  time_slicing?: DevicePluginConfigTimeSlicing
+}
+
 export type ClusterConfig = {
+  device_plugin_config?: DevicePluginConfig
+  device_plugin_configmap_name?: string
+  device_plugin_configmap_namespace?: string
 }
 
 export type CreateClusterConfigRequest = {
   cluster_id?: string
-  dummy?: string
+  device_plugin_config?: DevicePluginConfig
 }
 
 export type GetClusterConfigRequest = {
@@ -59,7 +70,7 @@ export type GetClusterConfigRequest = {
 
 export type UpdateClusterConfigRequest = {
   cluster_id?: string
-  dummy?: string
+  device_plugin_config?: DevicePluginConfig
 }
 
 export type DeleteClusterConfigRequest = {
