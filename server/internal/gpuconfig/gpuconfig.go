@@ -18,7 +18,7 @@ func timeSlicingDevicePluginConfig(gpus int) *v1.Config {
 		},
 		Sharing: v1.Sharing{
 			TimeSlicing: v1.ReplicatedResources{
-				// Keep the original resoure name. When set to true, each resource is advertised under
+				// Keep the original resource name. When set to true, each resource is advertised under
 				// the name <resource-name>.shared instead of <resource-name>.
 				RenameByDefault: false,
 				// This is to enforce awareness that requesting more than one GPU replica does not result
