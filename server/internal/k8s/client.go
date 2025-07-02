@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -59,11 +60,22 @@ func (f *defaultClientFactory) getRestConfig(clusterID, token string) *rest.Conf
 
 // Client is a client to mange worker Kubernetes resources.
 type Client interface {
+	GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error)
 	CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error
+	UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error)
 }
 
 type defaultClient struct {
 	client kubernetes.Interface
+}
+
+// GetConfigMap gets a configmap.
+func (c *defaultClient) GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error) {
+	conf, err := c.client.CoreV1().ConfigMaps(namespace).Get(ctx, name, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return conf, nil
 }
 
 // CreateConfigMap creates a configmap.
@@ -72,6 +84,16 @@ func (c *defaultClient) CreateConfigMap(ctx context.Context, name, namespace str
 	conf := corev1apply.ConfigMap(name, namespace).WithBinaryData(data)
 	_, err := c.client.CoreV1().ConfigMaps(namespace).Apply(ctx, conf, opts)
 	return err
+}
+
+// UpdateConfigMap updates a configmap.
+func (c *defaultClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error) {
+	existing, err := c.GetConfigMap(ctx, name, namespace)
+	if err != nil {
+		return nil, err
+	}
+	existing.BinaryData = data
+	return c.client.CoreV1().ConfigMaps(namespace).Update(ctx, existing, metav1.UpdateOptions{})
 }
 
 // DynamicClient is a dynamic client to mange worker Kubernetes resources.
