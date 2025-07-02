@@ -63,6 +63,7 @@ type Client interface {
 	GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error)
 	CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error
 	UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error)
+	DeleteConfigMap(ctx context.Context, name, namespace string) error
 }
 
 type defaultClient struct {
@@ -94,6 +95,13 @@ func (c *defaultClient) UpdateConfigMap(ctx context.Context, name, namespace str
 	}
 	existing.BinaryData = data
 	return c.client.CoreV1().ConfigMaps(namespace).Update(ctx, existing, metav1.UpdateOptions{})
+}
+
+// DeleteConfigMap deletes a configmap.
+func (c *defaultClient) DeleteConfigMap(ctx context.Context, name, namespace string) error {
+	return c.client.CoreV1().ConfigMaps(namespace).Delete(ctx, name, metav1.DeleteOptions{
+		PropagationPolicy: ptr.To(metav1.DeletePropagationBackground),
+	})
 }
 
 // DynamicClient is a dynamic client to mange worker Kubernetes resources.
