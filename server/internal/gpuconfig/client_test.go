@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	nv1 "github.com/NVIDIA/k8s-device-plugin/api/config/v1"
+	"github.com/llmariner/cluster-manager/server/internal/k8s"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
@@ -17,7 +18,7 @@ func TestClient(t *testing.T) {
 	fc := fake.NewFakeClient()
 
 	configClient := NewClient(
-		newFakeK8sClient(fc),
+		k8s.NewFakeClient(fc),
 		"cmName",
 		"cmNamespace",
 		"gpuConfigName",
@@ -40,51 +41,15 @@ func TestClient(t *testing.T) {
 	res := got.Sharing.TimeSlicing.Resources[0]
 	assert.Equal(t, "nvidia.com/gpu", string(res.Name))
 	assert.Equal(t, 2, res.Replicas)
-}
 
-func newFakeK8sClient(c client.WithWatch) *fakeK8sClient {
-	return &fakeK8sClient{c: c}
-}
+	err = configClient.DeleteConfigMapIfExists(ctx, "cmName", "cmNamespace")
+	assert.NoError(t, err)
 
-type fakeK8sClient struct {
-	c client.WithWatch
-}
+	err = fc.Get(ctx, client.ObjectKey{Name: "cmName", Namespace: "cmNamespace"}, &cm)
+	assert.Error(t, err)
+	assert.True(t, apierrors.IsNotFound(err))
 
-func (c *fakeK8sClient) GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error) {
-	var cm corev1.ConfigMap
-	if err := c.c.Get(ctx, client.ObjectKey{Name: name, Namespace: namespace}, &cm); err != nil {
-		return nil, err
-	}
-	return &cm, nil
-}
+	err = configClient.DeleteConfigMapIfExists(ctx, "cmName", "cmNamespace")
+	assert.NoError(t, err)
 
-func (c *fakeK8sClient) CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error {
-	cm := configMap(name, namespace, data)
-	if err := c.c.Create(ctx, cm); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (c *fakeK8sClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error) {
-	cm := configMap(name, namespace, data)
-	if err := c.c.Update(ctx, cm); err != nil {
-		return nil, err
-	}
-	return cm, nil
-}
-
-func configMap(name, namespace string, data map[string][]byte) *corev1.ConfigMap {
-	d := map[string]string{}
-	for k, v := range data {
-		d[k] = string(v)
-	}
-	return &corev1.ConfigMap{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: namespace,
-		},
-		Data: d,
-	}
 }
