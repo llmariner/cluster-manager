@@ -69,7 +69,7 @@ type defaultClient struct {
 	client kubernetes.Interface
 }
 
-// GetConfigMap gets a configmap.
+// GetConfigMap gets a ConfigMap.
 func (c *defaultClient) GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error) {
 	conf, err := c.client.CoreV1().ConfigMaps(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
