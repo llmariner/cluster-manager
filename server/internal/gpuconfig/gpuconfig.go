@@ -4,8 +4,6 @@ import (
 	v1 "github.com/NVIDIA/k8s-device-plugin/api/config/v1"
 )
 
-// Doc:
-
 // timeSlicing returns a v1.Config that configures the NVIDIA GPU device plugin for time slicing.
 //
 // Link: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html
