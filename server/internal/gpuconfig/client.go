@@ -9,14 +9,14 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
-// NewManager returns a new Manager.
-func NewManager(
+// NewClient returns a new Client.
+func NewClient(
 	k8sClient k8s.Client,
 	configMapName string,
 	configMapNamespace string,
 	defaultConfigName string,
-) *Manager {
-	return &Manager{
+) *Client {
+	return &Client{
 		k8sClient:          k8sClient,
 		configMapName:      configMapName,
 		configMapNamespace: configMapNamespace,
@@ -24,8 +24,8 @@ func NewManager(
 	}
 }
 
-// Manager manages the NVIDIA GPU Device Plugin configuration in a Kubernetes cluster.
-type Manager struct {
+// Client manages the NVIDIA GPU Device Plugin configuration in a Kubernetes cluster.
+type Client struct {
 	k8sClient k8s.Client
 
 	configMapName      string
@@ -39,30 +39,30 @@ type Manager struct {
 }
 
 // CreateOrUpdateConfigMap creates or updates the ConfigMap for the NVIDIA GPU Device Plugin configuration.
-func (m *Manager) CreateOrUpdateConfigMap(ctx context.Context, dpconfig *nv1.Config) error {
+func (c *Client) CreateOrUpdateConfigMap(ctx context.Context, dpconfig *nv1.Config) error {
 	dpConfigBytes, err := yaml.Marshal(dpconfig)
 	if err != nil {
 		return err
 	}
 
 	configData := map[string][]byte{
-		m.defaultConfigName: dpConfigBytes,
+		c.defaultConfigName: dpConfigBytes,
 	}
 
-	if _, err := m.k8sClient.GetConfigMap(ctx, m.configMapName, m.configMapNamespace); err != nil {
+	if _, err := c.k8sClient.GetConfigMap(ctx, c.configMapName, c.configMapNamespace); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return err
 		}
 
 		// The ConfigMap does not exist. Create it.
-		if err := m.k8sClient.CreateConfigMap(ctx, m.configMapName, m.configMapNamespace, configData); err != nil {
+		if err := c.k8sClient.CreateConfigMap(ctx, c.configMapName, c.configMapNamespace, configData); err != nil {
 			return err
 		}
 		return nil
 	}
 
 	// The ConfigMap exists. Update it.
-	if _, err := m.k8sClient.UpdateConfigMap(ctx, m.configMapName, m.configMapNamespace, configData); err != nil {
+	if _, err := c.k8sClient.UpdateConfigMap(ctx, c.configMapName, c.configMapNamespace, configData); err != nil {
 		return err
 	}
 

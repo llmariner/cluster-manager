@@ -13,10 +13,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
-func TestManager(t *testing.T) {
+func TestClient(t *testing.T) {
 	fc := fake.NewFakeClient()
 
-	mgr := NewManager(
+	configClient := NewClient(
 		newFakeK8sClient(fc),
 		"cmName",
 		"cmNamespace",
@@ -25,7 +25,7 @@ func TestManager(t *testing.T) {
 
 	ctx := context.Background()
 	dpconfig := CreateTimeSlicingDevicePluginConfig(2)
-	err := mgr.CreateOrUpdateConfigMap(ctx, dpconfig)
+	err := configClient.CreateOrUpdateConfigMap(ctx, dpconfig)
 	assert.NoError(t, err)
 
 	var cm corev1.ConfigMap
