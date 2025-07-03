@@ -9,6 +9,7 @@ import (
 // Link: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html
 func CreateTimeSlicingDevicePluginConfig(gpus int) *nv1.Config {
 	return &nv1.Config{
+		Version: nv1.Version,
 		Flags: nv1.Flags{
 			CommandLineFlags: nv1.CommandLineFlags{
 				MigStrategy: strPtr(nv1.MigStrategyNone),
