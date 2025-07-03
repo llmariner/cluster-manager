@@ -55,8 +55,6 @@ export type DevicePluginConfig = {
 
 export type ClusterConfig = {
   device_plugin_config?: DevicePluginConfig
-  device_plugin_configmap_name?: string
-  device_plugin_configmap_namespace?: string
 }
 
 export type CreateClusterConfigRequest = {

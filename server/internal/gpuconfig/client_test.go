@@ -42,14 +42,14 @@ func TestClient(t *testing.T) {
 	assert.Equal(t, "nvidia.com/gpu", string(res.Name))
 	assert.Equal(t, 2, res.Replicas)
 
-	err = configClient.DeleteConfigMapIfExists(ctx, "cmName", "cmNamespace")
+	err = configClient.DeleteConfigMapIfExists(ctx)
 	assert.NoError(t, err)
 
 	err = fc.Get(ctx, client.ObjectKey{Name: "cmName", Namespace: "cmNamespace"}, &cm)
 	assert.Error(t, err)
 	assert.True(t, apierrors.IsNotFound(err))
 
-	err = configClient.DeleteConfigMapIfExists(ctx, "cmName", "cmNamespace")
+	err = configClient.DeleteConfigMapIfExists(ctx)
 	assert.NoError(t, err)
 
 }

@@ -7,15 +7,27 @@ import (
 
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/k8s"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
+	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestClusterConfig(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, testr.New(t), time.Hour)
+	fc := fake.NewFakeClient()
+	nvidiaConfig := config.NVIDIAConfig{
+		DevicePluginConfigMapName:      "llmariner-device-plugin-config",
+		DevicePluginConfigMapNamespace: "nvidia",
+		DevicePluginConfigName:         "llmariner-default",
+	}
+	srv := New(st, k8s.NewFakeClientFactory(fc), nvidiaConfig, time.Hour, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
 	c, err := srv.CreateCluster(ctx, &v1.CreateClusterRequest{
@@ -23,7 +35,7 @@ func TestClusterConfig(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	_, err = srv.CreateClusterConfig(ctx, &v1.CreateClusterConfigRequest{
+	config, err := srv.CreateClusterConfig(ctx, &v1.CreateClusterConfigRequest{
 		ClusterId: c.Id,
 		DevicePluginConfig: &v1.DevicePluginConfig{
 			TimeSlicing: &v1.DevicePluginConfig_TimeSlicing{
@@ -32,16 +44,32 @@ func TestClusterConfig(t *testing.T) {
 		},
 	})
 	assert.NoError(t, err)
+	assert.Equal(t, int32(2), config.DevicePluginConfig.TimeSlicing.Gpus)
 
-	_, err = srv.GetClusterConfig(ctx, &v1.GetClusterConfigRequest{
+	var cm corev1.ConfigMap
+	key := client.ObjectKey{
+		Name:      nvidiaConfig.DevicePluginConfigMapName,
+		Namespace: nvidiaConfig.DevicePluginConfigMapNamespace,
+	}
+	err = fc.Get(ctx, key, &cm)
+	assert.NoError(t, err)
+	_, ok := cm.Data[nvidiaConfig.DevicePluginConfigName]
+	assert.True(t, ok)
+
+	config, err = srv.GetClusterConfig(ctx, &v1.GetClusterConfigRequest{
 		ClusterId: c.Id,
 	})
 	assert.NoError(t, err)
+	assert.Equal(t, int32(2), config.DevicePluginConfig.TimeSlicing.Gpus)
 
 	_, err = srv.DeleteClusterConfig(ctx, &v1.DeleteClusterConfigRequest{
 		ClusterId: c.Id,
 	})
 	assert.NoError(t, err)
+
+	err = fc.Get(ctx, key, &cm)
+	assert.Error(t, err)
+	assert.True(t, apierrors.IsNotFound(err))
 }
 
 func TestCreateClusterConfig(t *testing.T) {
@@ -106,7 +134,12 @@ func TestCreateClusterConfig(t *testing.T) {
 			st, tearDown := store.NewTest(t)
 			defer tearDown()
 
-			srv := New(st, testr.New(t), time.Hour)
+			nvidiaConfig := config.NVIDIAConfig{
+				DevicePluginConfigMapName:      "llmariner-device-plugin-config",
+				DevicePluginConfigMapNamespace: "nvidia",
+				DevicePluginConfigName:         "llmariner-default",
+			}
+			srv := New(st, k8s.NewFakeClientFactory(fake.NewFakeClient()), nvidiaConfig, time.Hour, testr.New(t))
 			ctx := fakeAuthInto(context.Background())
 
 			c, err := srv.CreateCluster(ctx, &v1.CreateClusterRequest{

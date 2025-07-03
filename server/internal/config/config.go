@@ -57,6 +57,26 @@ func (c *DefaultClusterConfig) validate() error {
 	return nil
 }
 
+// NVIDIAConfig is the configuration for Nvidia components.
+type NVIDIAConfig struct {
+	DevicePluginConfigMapName      string `yaml:"devicePluginConfigMapName"`
+	DevicePluginConfigMapNamespace string `yaml:"devicePluginConfigMapNamespace"`
+	DevicePluginConfigName         string `yaml:"devicePluginConfigName"`
+}
+
+func (c *NVIDIAConfig) validate() error {
+	if c.DevicePluginConfigMapName == "" {
+		return fmt.Errorf("devicePluginConfigMapName must be set")
+	}
+	if c.DevicePluginConfigMapNamespace == "" {
+		return fmt.Errorf("devicePluginConfigMapNamespace must be set")
+	}
+	if c.DevicePluginConfigName == "" {
+		return fmt.Errorf("devicePluginConfigName must be set")
+	}
+	return nil
+}
+
 // Config is the configuration.
 type Config struct {
 	GRPCPort              int `yaml:"grpcPort"`
@@ -77,6 +97,8 @@ type Config struct {
 	ComponentStatusTimeout time.Duration `yaml:"componentStatusTimeout"`
 
 	DefaultCluster DefaultClusterConfig `yaml:"defaultCluster"`
+
+	NVIDIA NVIDIAConfig `yaml:"nvidia"`
 }
 
 // Validate validates the configuration.
@@ -114,6 +136,10 @@ func (c *Config) Validate() error {
 
 	if err := c.DefaultCluster.validate(); err != nil {
 		return fmt.Errorf("defaultCluster: %s", err)
+	}
+
+	if err := c.NVIDIA.validate(); err != nil {
+		return fmt.Errorf("nvidia: %s", err)
 	}
 
 	if err := c.UsageSender.Validate(); err != nil {

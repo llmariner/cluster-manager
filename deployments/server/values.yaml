@@ -131,6 +131,15 @@ defaultCluster:
   registrationKey: clusterkey-default-key-secret
   tenantId: default-tenant-id
 
+# Configuration for NVIDIA components.
+nvidia:
+  # Name of the configmap where the device plugin configuration is stored.
+  devicePluginConfigMapName: devicePluginConfigName
+  # Namespace where the configmap is created.
+  devicePluginConfigMapNamespace: nvidia
+  # Name of the config used by the NVIDIA cluster policy.
+  devicePluginConfigName: llmariner-default
+
 # The timeout for the component status check.
 componentStatusTimeout: 30m
 

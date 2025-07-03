@@ -8,17 +8,19 @@ import (
 	"github.com/go-logr/logr/testr"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/k8s"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestClusters(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, testr.New(t), time.Hour)
+	srv := New(st, k8s.NewFakeClientFactory(fake.NewFakeClient()), config.NVIDIAConfig{}, time.Hour, testr.New(t))
 	isrv := NewInternal(st, testr.New(t))
 	ctx := fakeAuthInto(context.Background())
 
@@ -71,7 +73,7 @@ func TestCreateDefaultCluster(t *testing.T) {
 	st, tearDown := store.NewTest(t)
 	defer tearDown()
 
-	srv := New(st, testr.New(t), time.Hour)
+	srv := New(st, k8s.NewFakeClientFactory(fake.NewFakeClient()), config.NVIDIAConfig{}, time.Hour, testr.New(t))
 
 	c := &config.DefaultClusterConfig{
 		Name:            "default-cluster",

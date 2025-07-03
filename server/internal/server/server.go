@@ -10,6 +10,7 @@ import (
 	"github.com/llmariner/api-usage/pkg/sender"
 	v1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/llmariner/cluster-manager/server/internal/config"
+	"github.com/llmariner/cluster-manager/server/internal/k8s"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	"github.com/llmariner/rbac-manager/pkg/auth"
 	"google.golang.org/grpc"
@@ -26,10 +27,18 @@ const (
 )
 
 // New creates a server.
-func New(store *store.S, log logr.Logger, timeout time.Duration) *S {
+func New(
+	store *store.S,
+	k8sClientFactory k8s.ClientFactory,
+	nvidiaConfig config.NVIDIAConfig,
+	componentStatusTimeout time.Duration,
+	log logr.Logger,
+) *S {
 	return &S{
-		componentStatusTimeout: timeout,
 		store:                  store,
+		k8sClientFactory:       k8sClientFactory,
+		nvidiaConfig:           nvidiaConfig,
+		componentStatusTimeout: componentStatusTimeout,
 		log:                    log.WithName("grpc"),
 	}
 }
@@ -37,6 +46,10 @@ func New(store *store.S, log logr.Logger, timeout time.Duration) *S {
 // S is a server.
 type S struct {
 	v1.UnimplementedClustersServiceServer
+
+	k8sClientFactory k8s.ClientFactory
+
+	nvidiaConfig config.NVIDIAConfig
 
 	componentStatusTimeout time.Duration
 
