@@ -61,8 +61,8 @@ func (f *defaultClientFactory) getRestConfig(clusterID, token string) *rest.Conf
 // Client is a client to mange worker Kubernetes resources.
 type Client interface {
 	GetConfigMap(ctx context.Context, name, namespace string) (*corev1.ConfigMap, error)
-	CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error
-	UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error)
+	CreateConfigMap(ctx context.Context, name, namespace string, data map[string]string) error
+	UpdateConfigMap(ctx context.Context, name, namespace string, data map[string]string) (*corev1.ConfigMap, error)
 	DeleteConfigMap(ctx context.Context, name, namespace string) error
 }
 
@@ -80,20 +80,20 @@ func (c *defaultClient) GetConfigMap(ctx context.Context, name, namespace string
 }
 
 // CreateConfigMap creates a configmap.
-func (c *defaultClient) CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error {
+func (c *defaultClient) CreateConfigMap(ctx context.Context, name, namespace string, data map[string]string) error {
 	opts := metav1.ApplyOptions{FieldManager: fieldManager, Force: true}
-	conf := corev1apply.ConfigMap(name, namespace).WithBinaryData(data)
+	conf := corev1apply.ConfigMap(name, namespace).WithData(data)
 	_, err := c.client.CoreV1().ConfigMaps(namespace).Apply(ctx, conf, opts)
 	return err
 }
 
 // UpdateConfigMap updates a configmap.
-func (c *defaultClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error) {
+func (c *defaultClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string]string) (*corev1.ConfigMap, error) {
 	existing, err := c.GetConfigMap(ctx, name, namespace)
 	if err != nil {
 		return nil, err
 	}
-	existing.BinaryData = data
+	existing.Data = data
 	return c.client.CoreV1().ConfigMaps(namespace).Update(ctx, existing, metav1.UpdateOptions{})
 }
 
