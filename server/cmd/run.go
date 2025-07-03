@@ -74,7 +74,6 @@ func run(ctx context.Context, c *config.Config) error {
 	}
 
 	k8sClientFactory := k8s.NewClientFactory(c.SessionManagerServerEndpoint)
-	fmt.Printf("%+v\n", k8sClientFactory)
 
 	addr := fmt.Sprintf("localhost:%d", c.GRPCPort)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
@@ -100,7 +99,7 @@ func run(ctx context.Context, c *config.Config) error {
 		return err
 	}
 
-	s := server.New(st, logger, c.ComponentStatusTimeout)
+	s := server.New(st, k8sClientFactory, c.NVIDIA, c.ComponentStatusTimeout, logger)
 
 	var usageSetter sender.UsageSetter
 	if c.UsageSender.Enable {

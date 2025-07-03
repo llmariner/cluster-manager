@@ -62,9 +62,6 @@ message DevicePluginConfig {
 
 message ClusterConfig {
   DevicePluginConfig device_plugin_config = 1;
-
-  string device_plugin_configmap_name = 2;
-  string device_plugin_configmap_namespace = 3;
 }
 
 message CreateClusterConfigRequest {

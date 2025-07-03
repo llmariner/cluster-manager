@@ -29,6 +29,10 @@ data:
       name: {{ .Values.defaultCluster.name }}
       registrationKey: {{ .Values.defaultCluster.registrationKey}}
       tenantId: {{ .Values.defaultCluster.tenantId }}
+    nvidia:
+      devicePluginConfigMapName: {{ .Values.nvidia.devicePluginConfigMapName }}
+      devicePluginConfigMapNamespace: {{ .Values.nvidia.devicePluginConfigMapNamespace }}
+      devicePluginConfigName: {{ .Values.nvidia.devicePluginConfigName }}
     usageSender:
       {{- toYaml .Values.global.usageSender | nindent 6 }}
     componentStatusTimeout: {{ .Values.componentStatusTimeout }}

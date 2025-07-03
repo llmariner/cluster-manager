@@ -69,15 +69,15 @@ func (c *Client) CreateOrUpdateConfigMap(ctx context.Context, dpconfig *Config) 
 }
 
 // DeleteConfigMapIfExists deletes the ConfigMap for the NVIDIA GPU Device Plugin configuration if it exists.
-func (c *Client) DeleteConfigMapIfExists(ctx context.Context, name, namespace string) error {
-	if _, err := c.k8sClient.GetConfigMap(ctx, name, namespace); err != nil {
+func (c *Client) DeleteConfigMapIfExists(ctx context.Context) error {
+	if _, err := c.k8sClient.GetConfigMap(ctx, c.configMapName, c.configMapNamespace); err != nil {
 		if apierrors.IsNotFound(err) {
 			return nil
 		}
 		return err
 	}
 
-	if err := c.k8sClient.DeleteConfigMap(ctx, name, namespace); err != nil {
+	if err := c.k8sClient.DeleteConfigMap(ctx, c.configMapName, c.configMapNamespace); err != nil {
 		return err
 	}
 	return nil

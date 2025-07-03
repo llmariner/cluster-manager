@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	v1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/cluster-manager/server/internal/gpuconfig"
 	"github.com/llmariner/cluster-manager/server/internal/store"
 	gerrors "github.com/llmariner/common/pkg/gormlib/errors"
 	"github.com/llmariner/rbac-manager/pkg/auth"
@@ -13,12 +14,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
-)
-
-const (
-	// TODO(kenji): Make these configurable.
-	defaultDevicePluginConfigMapName      = "device-plugin-config"
-	defaultDevicePluginConfigMapNamespace = "nvidia"
 )
 
 // CreateClusterConfig creates a cluster config.
@@ -40,17 +35,23 @@ func (s *S) CreateClusterConfig(
 	}
 
 	configProto := &v1.ClusterConfig{
-		DevicePluginConfig:             req.DevicePluginConfig,
-		DevicePluginConfigmapName:      defaultDevicePluginConfigMapName,
-		DevicePluginConfigmapNamespace: defaultDevicePluginConfigMapNamespace,
+		DevicePluginConfig: req.DevicePluginConfig,
 	}
 	msg, err := proto.Marshal(configProto)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "marshal cluster config: %s", err)
 	}
 
-	// TODO(kenji): Create the ConfigMap in the k8s' cluster before persisting it in the database.
+	// Create the ConfigMap in the k8s' cluster before persisting it in the database.
 	// TODO(kenji): Revisit. This can be an asynchronous operation.
+	gClient, err := s.newGPUConfigClient(ctx, req.ClusterId)
+	if err != nil {
+		return nil, err
+	}
+	dpconfig := gpuconfig.CreateTimeSlicingDevicePluginConfig(int(configProto.DevicePluginConfig.TimeSlicing.Gpus))
+	if err := gClient.CreateOrUpdateConfigMap(ctx, dpconfig); err != nil {
+		return nil, status.Errorf(codes.Internal, "create device plugin config map: %s", err)
+	}
 
 	config := &store.ClusterConfig{
 		ClusterID: req.ClusterId,
@@ -133,9 +134,15 @@ func (s *S) DeleteClusterConfig(
 		return nil, err
 	}
 
-	// TODO(kenji): Delete the ConfigMap from the k8s cluster. Ignore the error if the ConfigMap does not exist.
-
+	// Delete the ConfigMap from the k8s cluster. Ignore the error if the ConfigMap does not exist.
 	// TODO(kenji): Revisit. This can be an asynchronous operation.
+	gClient, err := s.newGPUConfigClient(ctx, req.ClusterId)
+	if err != nil {
+		return nil, err
+	}
+	if err := gClient.DeleteConfigMapIfExists(ctx); err != nil {
+		return nil, status.Errorf(codes.Internal, "delete device plugin config map: %s", err)
+	}
 
 	if err := s.store.DeleteClusterConfig(req.ClusterId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -145,6 +152,25 @@ func (s *S) DeleteClusterConfig(
 	}
 
 	return &emptypb.Empty{}, nil
+}
+
+func (s *S) newGPUConfigClient(ctx context.Context, clusterID string) (*gpuconfig.Client, error) {
+	authToken, err := auth.ExtractTokenFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	k8sClient, err := s.k8sClientFactory.NewClient(clusterID, authToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "create k8s client: %s", err)
+	}
+
+	return gpuconfig.NewClient(
+		k8sClient,
+		s.nvidiaConfig.DevicePluginConfigMapName,
+		s.nvidiaConfig.DevicePluginConfigMapNamespace,
+		s.nvidiaConfig.DevicePluginConfigName,
+	), nil
 }
 
 func (s *S) validateClusterID(clusterID string, userInfo *auth.UserInfo) error {
