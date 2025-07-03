@@ -40,7 +40,7 @@ type FakeK8sClient struct {
 }
 
 // CreateConfigMap creates a new ConfigMap.
-func (c *FakeK8sClient) CreateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) error {
+func (c *FakeK8sClient) CreateConfigMap(ctx context.Context, name, namespace string, data map[string]string) error {
 	cm := configMap(name, namespace, data)
 	if err := c.c.Create(ctx, cm); err != nil {
 		return err
@@ -59,7 +59,7 @@ func (c *FakeK8sClient) GetConfigMap(ctx context.Context, name, namespace string
 }
 
 // UpdateConfigMap updates an existing ConfigMap.
-func (c *FakeK8sClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string][]byte) (*corev1.ConfigMap, error) {
+func (c *FakeK8sClient) UpdateConfigMap(ctx context.Context, name, namespace string, data map[string]string) (*corev1.ConfigMap, error) {
 	cm := configMap(name, namespace, data)
 	if err := c.c.Update(ctx, cm); err != nil {
 		return nil, err
@@ -79,16 +79,12 @@ func (c *FakeK8sClient) DeleteConfigMap(ctx context.Context, name, namespace str
 	return nil
 }
 
-func configMap(name, namespace string, data map[string][]byte) *corev1.ConfigMap {
-	d := map[string]string{}
-	for k, v := range data {
-		d[k] = string(v)
-	}
+func configMap(name, namespace string, data map[string]string) *corev1.ConfigMap {
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
 		},
-		Data: d,
+		Data: data,
 	}
 }

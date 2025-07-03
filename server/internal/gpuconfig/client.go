@@ -45,8 +45,8 @@ func (c *Client) CreateOrUpdateConfigMap(ctx context.Context, dpconfig *nv1.Conf
 		return err
 	}
 
-	configData := map[string][]byte{
-		c.defaultConfigName: dpConfigBytes,
+	configData := map[string]string{
+		c.defaultConfigName: string(dpConfigBytes),
 	}
 
 	if _, err := c.k8sClient.GetConfigMap(ctx, c.configMapName, c.configMapNamespace); err != nil {
