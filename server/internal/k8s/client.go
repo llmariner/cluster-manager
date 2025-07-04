@@ -33,7 +33,7 @@ type defaultClientFactory struct {
 	endpoint string
 }
 
-// NewK8sClient creates a new Client.
+// NewClient creates a new Client.
 func (f *defaultClientFactory) NewClient(clusterID, token string) (Client, error) {
 	client, err := kubernetes.NewForConfig(f.getRestConfig(clusterID, token))
 	if err != nil {
@@ -42,7 +42,7 @@ func (f *defaultClientFactory) NewClient(clusterID, token string) (Client, error
 	return &defaultClient{client: client}, nil
 }
 
-// NewDynamicK8sClient creates a new dynamic Client.
+// NewDynamicClient creates a new dynamic Client.
 func (f *defaultClientFactory) NewDynamicClient(clusterID, token string) (DynamicClient, error) {
 	client, err := dynamic.NewForConfig(f.getRestConfig(clusterID, token))
 	if err != nil {
