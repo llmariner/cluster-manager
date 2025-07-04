@@ -134,7 +134,7 @@ defaultCluster:
 # Configuration for NVIDIA components.
 nvidia:
   # Name of the configmap where the device plugin configuration is stored.
-  devicePluginConfigMapName: devicePluginConfigName
+  devicePluginConfigMapName: llmariner-device-plugin-config
   # Namespace where the configmap is created.
   devicePluginConfigMapNamespace: nvidia
   # Name of the config used by the NVIDIA cluster policy.
