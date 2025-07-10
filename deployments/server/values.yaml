@@ -285,7 +285,7 @@ securityContext:
 
 # Additional environment variables for the cluster-manager-server container.
 # +docs:property
-# clusterManagerServer:
+# cluster-manager-server:
 #   env: []
 #   envFrom: []
 
