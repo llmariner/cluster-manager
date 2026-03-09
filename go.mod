@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.1
 
 require (
-	github.com/NVIDIA/k8s-device-plugin v0.17.2
+	github.com/NVIDIA/k8s-device-plugin v0.17.3
 	github.com/go-logr/logr v1.4.2
 	github.com/go-logr/stdr v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
